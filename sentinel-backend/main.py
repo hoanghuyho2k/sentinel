@@ -8,6 +8,8 @@ from services.risk_predictor import predict_risk_score, extract_features
 from dotenv import load_dotenv
 import asyncpg
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime
+
 
 load_dotenv()
 
