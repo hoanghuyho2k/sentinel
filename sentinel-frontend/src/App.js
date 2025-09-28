@@ -8,7 +8,7 @@ import {
   Link,
 } from "react-router-dom";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "https://sentinel-qdq4.onrender.com";
+const API_BASE = "https://sentinel-qdq4.onrender.com";
 
 // ---------- small UI helpers ----------
 function Badge({ children, ok }) {
