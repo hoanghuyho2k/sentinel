@@ -1,0 +1,70 @@
+
+
+/*Navbar base*/
+.navbar {
+    background-color: var(--background-color);
+    text-color: var(--text-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    text-color: var(--text-color)
+}
+
+/*Flex container*/
+.navbar-container {
+    margin: 0 auto;
+    padding: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    display: flex;
+    gap: 5rem;
+}
+
+/*Logo*/
+.navbar-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
+    margin-right: auto;
+}
+
+/*Links */
+.navbar-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    justify-content: center;
+    gap: 2rem;
+}
+
+/* BUTTONS */
+.navbar-buttons {
+    font-size: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-left: auto;
+}
+
+/*Mobile*/
+@media (max-width: 768px) {
+    .navbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .navbar-links li {
+        margin-bottom: 0.5rem;
+        border: none;
+    }
+}

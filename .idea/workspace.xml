@@ -5,25 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7322ce0f-5c4f-47c4-88c8-3889d8dd4a45" name="Changes" comment="App setup">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/eslint.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/public/vite.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/App.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/App.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/assets/react.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/main.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/vite.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/components/Navbar.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/Dashboard.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/DataRecords.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/Login.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/NotFound.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/Reports.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/Settings.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/Users.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/styles/Navbar.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/styles/theme.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/styles/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/main.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -67,6 +76,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/sentinel/src/styles" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="localhost:5173" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:5173/">
       <method v="2" />
@@ -91,8 +105,17 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1760265701666</updated>
-      <workItem from="1760265702920" duration="3069000" />
+      <workItem from="1760265702920" duration="13817000" />
     </task>
+    <task id="LOCAL-00001" summary="App setup">
+      <option name="closed" value="true" />
+      <created>1760268794695</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1760268794695</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

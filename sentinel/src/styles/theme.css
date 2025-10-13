@@ -1,0 +1,7 @@
+:root {
+    --bg-color: white;
+    --text-color: black;
+    --accent-color: beige;
+    --accent-color-hover: lightblue;
+    --font-body: 'Roboto', sans-serif;
+}
