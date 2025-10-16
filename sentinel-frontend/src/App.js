@@ -199,18 +199,22 @@ function Dashboard() {
 // ---------- History Page ----------
 function History() {
   const [rows, setRows] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedCommit, setSelectedCommit] = useState(null);
-  const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const fetchHistory = async () => {
     setLoading(true);
+    setError("");
     try {
-      const res = await axios.get(`${API_BASE}/api/history?limit=200`);
-      setRows(res.data || []);
+      const res = await axios.get(`${API_BASE}/api/history?limit=100`);
+      if (Array.isArray(res.data)) {
+        setRows(res.data);
+      } else {
+        throw new Error("Invalid data from backend");
+      }
     } catch (e) {
-      console.error(e);
-      alert("Failed to load history.");
+      console.error("Failed to load history:", e);
+      setError("Failed to connect to backend API.");
     } finally {
       setLoading(false);
     }
@@ -220,81 +224,83 @@ function History() {
     fetchHistory();
   }, []);
 
-  const postComment = async (commitHash) => {
-    if (!comment.trim()) return;
-    try {
-      await axios.post(`${API_BASE}/api/feedback`, {
-        user_id: "local-dev",
-        commit_hash: commitHash,
-        message: comment
-      });
-      setComment("");
-      fetchHistory();
-    } catch (e) {
-      console.error(e);
-      alert("Failed to post comment.");
-    }
-  };
+  if (loading) {
+    return (
+      <div style={{ padding: 20 }}>
+        <h1>📚 History</h1>
+        <p>Loading recent checks...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: 20 }}>
+        <h1>📚 History</h1>
+        <p style={{ color: "red" }}>{error}</p>
+      </div>
+    );
+  }
+
+  if (rows.length === 0) {
+    return (
+      <div style={{ padding: 20 }}>
+        <h1>📚 History</h1>
+        <p>No records found yet. Run a Sentinel Check first.</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: 20 }}>
       <h1>📚 History</h1>
-      <p>Recent compliance & risk results</p>
+      <p>Recent compliance & risk evaluations</p>
+      <button onClick={fetchHistory} style={{ marginBottom: 12 }}>
+        🔄 Refresh
+      </button>
 
-      <div style={{ marginTop: 12 }}>
-        <button onClick={fetchHistory}>Refresh</button>
-      </div>
-
-      {loading ? <p>Loading…</p> :
-        <table style={{ width: "100%", marginTop: 12, borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ textAlign: "left", borderBottom: "1px solid #ddd" }}>
-              <th>When</th>
-              <th>Message</th>
-              <th>Files</th>
-              <th>Compliance</th>
-              <th>Risk</th>
-              <th>Feedback</th>
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <thead>
+          <tr style={{ textAlign: "left", borderBottom: "1px solid #ddd" }}>
+            <th>Timestamp</th>
+            <th>Commit Message</th>
+            <th>Compliance</th>
+            <th>Risk</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.id} style={{ borderBottom: "1px solid #f0f0f0" }}>
+              <td style={{ padding: 8 }}>
+                {r.created_at
+                  ? new Date(r.created_at).toLocaleString()
+                  : "—"}
+              </td>
+              <td style={{ padding: 8, maxWidth: 300 }}>
+                {r.commit_message || "(no message)"}
+              </td>
+              <td style={{ padding: 8 }}>
+                <Badge ok={r.is_compliant}>
+                  {r.is_compliant ? "PASS" : "FAIL"}
+                </Badge>
+                <div style={{ fontSize: 12, color: "#555" }}>
+                  {r.compliance_message}
+                </div>
+              </td>
+              <td style={{ padding: 8, width: 200 }}>
+                <ProgressBar value={Math.round(r.risk_score || 0)} />
+                <div style={{ fontSize: 12, marginTop: 4 }}>
+                  {r.risk_message || "No risk message"}
+                </div>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.id} style={{ borderBottom: "1px solid #f0f0f0" }}>
-                <td style={{ padding: 8 }}>{new Date(r.created_at).toLocaleString()}</td>
-                <td style={{ padding: 8, maxWidth: 300 }}>{r.commit_message}</td>
-                <td style={{ padding: 8 }}>{(r.files_changed || []).slice(0,3).join(", ")}</td>
-                <td style={{ padding: 8 }}>
-                  <Badge ok={r.is_compliant}>{r.is_compliant ? "PASS" : "FAIL"}</Badge>
-                  <div style={{ fontSize: 12, color: "#555", marginTop: 6 }}>{r.compliance_message}</div>
-                </td>
-                <td style={{ padding: 8 }}>
-                  <div style={{ width: 160 }}>
-                    <ProgressBar value={Math.round(r.risk_score || 0)} />
-                  </div>
-                  <div style={{ fontSize: 12 }}>{r.risk_message || "No risk message"}</div>
-                </td>
-                <td style={{ padding: 8 }}>
-                  <div>
-                    <input value={selectedCommit === r.commit_hash ? comment : ""} onChange={(e) => { setSelectedCommit(r.commit_hash); setComment(e.target.value); }} placeholder="Add feedback" style={{ width: 220 }} />
-                    <button onClick={() => postComment(r.commit_hash)} style={{ marginLeft: 6 }}>Send</button>
-                  </div>
-                  {r.feedback && r.feedback.length > 0 && (
-                    <div style={{ marginTop: 8 }}>
-                      <strong>Recent:</strong>
-                      <ul>
-                        {r.feedback.slice(-3).map((f, i) => (<li key={i}><small>{f.user_id}: {f.message}</small></li>))}
-                      </ul>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      }
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
+
 
 // ---------- App Root & Router ----------
 function App() {
