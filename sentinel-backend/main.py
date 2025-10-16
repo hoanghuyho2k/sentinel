@@ -141,18 +141,26 @@ def risk_score_endpoint(payload: RiskInput):
 # ------------------------------------------------------------
 @app.post("/api/save-result")
 async def save_result(payload: dict):
-    """Stores compliance + risk evaluation in PostgreSQL"""
+    """
+    Expected payload:
+    {
+      commit_hash, repo_name, commit_message, files_changed, labels,
+      compliance: { is_compliant, message, title, category, confidence },
+      risk: { risk_score, factors, message }
+    }
+    """
     if not app.state.db_pool:
         raise HTTPException(status_code=500, detail="Database not configured")
 
     pool = app.state.db_pool
     async with pool.acquire() as conn:
         async with conn.transaction():
-            comp = payload.get("compliance", {})
-            risk = payload.get("risk", {})
+            comp = payload.get("compliance", {}) or {}
+            risk = payload.get("risk", {}) or {}
             files_arr = payload.get("files_changed") or payload.get("files") or []
+            labels = payload.get("labels") or []
 
-            # Insert compliance record
+            # Insert compliance and capture ID
             row = await conn.fetchrow("""
                 INSERT INTO compliance_results
                 (commit_hash, repo_name, commit_message, files_changed, labels,
@@ -164,33 +172,31 @@ async def save_result(payload: dict):
                 payload.get("repo_name"),
                 payload.get("commit_message"),
                 files_arr,
-                payload.get("labels") or [],
+                labels,
                 comp.get("is_compliant"),
                 comp.get("message"),
                 comp.get("title"),
                 comp.get("category"),
                 float(comp.get("confidence") or 0.0)
             )
+
             comp_id = row["id"]
 
-            # Insert risk data (if exists)
-            if risk:
-                factors = risk.get("factors")
-                if isinstance(factors, (dict, list)):
-                    factors = json.dumps(factors)
-                await conn.execute("""
-                    INSERT INTO risk_scores
-                    (compliance_id, commit_hash, repo_name, risk_score, factors, risk_message)
-                    VALUES ($1,$2,$3,$4,$5,$6)
-                """,
-                    comp_id,
-                    payload.get("commit_hash"),
-                    payload.get("repo_name"),
-                    float(risk.get("risk_score") or 0.0),
-                    factors,
-                    risk.get("message")
-                )
-    return {"status": "ok"}
+            await conn.execute("""
+                INSERT INTO risk_scores
+                (compliance_id, commit_hash, repo_name, risk_score, factors, risk_message)
+                VALUES ($1, $2, $3, $4, $5, $6)
+            """,
+                comp_id,
+                payload.get("commit_hash"),
+                payload.get("repo_name"),
+                float(risk.get("risk_score") or 0.0),
+                json.dumps(risk.get("factors") or {}),
+                risk.get("message")
+            )
+
+    return {"status": "ok", "compliance_id": comp_id}
+
 
 
 # ------------------------------------------------------------
