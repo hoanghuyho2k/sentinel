@@ -118,41 +118,47 @@ async def save_result(payload: dict):
             comp = payload.get("compliance", {})
             risk = payload.get("risk", {})
             files_arr = payload.get("files_changed") or payload.get("files") or []
+            labels_arr = payload.get("labels") or []
 
-            row = await conn.fetchrow("""
+            # 🔧 Ensure lists are JSON-encoded before saving
+            files_json = json.dumps(files_arr)
+            labels_json = json.dumps(labels_arr)
+            factors_json = json.dumps(risk.get("factors") or {})
+
+            # insert compliance
+            await conn.execute("""
                 INSERT INTO compliance_results
                 (commit_hash, repo_name, commit_message, files_changed, labels,
                  is_compliant, compliance_message, compliance_title, category, confidence)
                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-                RETURNING id
             """,
                 payload.get("commit_hash"),
                 payload.get("repo_name"),
                 payload.get("commit_message"),
-                files_arr,
-                payload.get("labels") or [],
+                files_json,
+                labels_json,
                 comp.get("is_compliant"),
                 comp.get("message"),
                 comp.get("title"),
                 comp.get("category"),
                 float(comp.get("confidence") or 0.0)
             )
-            comp_id = row["id"]
 
-            if risk:
-                await conn.execute("""
-                    INSERT INTO risk_scores
-                    (compliance_id, commit_hash, repo_name, risk_score, factors, risk_message)
-                    VALUES ($1,$2,$3,$4,$5,$6)
-                """,
-                    comp_id,
-                    payload.get("commit_hash"),
-                    payload.get("repo_name"),
-                    float(risk.get("risk_score") or 0.0),
-                    json.dumps(risk.get("factors") or {}),
-                    risk.get("message")
-                )
+            # insert risk
+            await conn.execute("""
+                INSERT INTO risk_scores
+                (commit_hash, repo_name, risk_score, factors, risk_message)
+                VALUES ($1,$2,$3,$4,$5)
+            """,
+                payload.get("commit_hash"),
+                payload.get("repo_name"),
+                float(risk.get("risk_score") or 0.0),
+                factors_json,
+                risk.get("message")
+            )
+
     return {"status": "ok"}
+
 
 @app.get("/api/history")
 async def get_history(limit: int = 100):
