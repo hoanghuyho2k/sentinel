@@ -170,14 +170,16 @@ async def get_history(limit: int = 100):
 
     pool = app.state.db_pool
     async with pool.acquire() as conn:
+        # Join by commit_message if commit_hash is null, fallback to most recent
         rows = await conn.fetch("""
-           SELECT c.id, c.commit_hash, c.repo_name, c.commit_message, c.files_changed,
-                  c.is_compliant, c.compliance_message, c.compliance_title, c.category, c.confidence,
-                  r.risk_score, r.factors, r.risk_message, c.created_at
-           FROM compliance_results c
-           LEFT JOIN risk_scores r ON c.id = r.compliance_id
-           ORDER BY c.created_at DESC
-           LIMIT $1
+            SELECT c.id, c.commit_hash, c.repo_name, c.commit_message, c.files_changed,
+                   c.is_compliant, c.compliance_message, c.compliance_title, c.category, c.confidence,
+                   r.risk_score, r.factors, r.risk_message, c.created_at
+            FROM compliance_results c
+            LEFT JOIN risk_scores r 
+                ON COALESCE(c.commit_hash, c.commit_message) = COALESCE(r.commit_hash, r.repo_name)
+            ORDER BY c.created_at DESC
+            LIMIT $1
         """, limit)
 
         result = []
@@ -193,12 +195,13 @@ async def get_history(limit: int = 100):
                 "compliance_title": r["compliance_title"],
                 "category": r["category"],
                 "confidence": float(r["confidence"]) if r["confidence"] is not None else None,
-                "risk_score": float(r["risk_score"]) if r["risk_score"] is not None else None,
+                "risk_score": float(r["risk_score"]) if r["risk_score"] is not None else 0.0,
                 "factors": r["factors"],
                 "risk_message": r["risk_message"],
-                "created_at": r["created_at"].isoformat()
+                "created_at": r["created_at"].isoformat() if r["created_at"] else None
             })
         return result
+
 
 @app.post("/api/feedback")
 async def post_feedback(payload: dict):
