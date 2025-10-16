@@ -235,7 +235,7 @@ async def get_history(limit: int = 100):
                 "risk_score": float(r["risk_score"]) if r["risk_score"] is not None else 0.0,
                 "factors": r["factors"],
                 "risk_message": r["risk_message"] or "No risk message",
-                "created_at": r["created_at"].isoformat() if r["created_at"] else None,
+                "created_at": r["created_at"].isoformat()
             })
         return result
 
