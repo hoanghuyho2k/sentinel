@@ -109,6 +109,14 @@ def risk_score_endpoint(payload: RiskInput):
 
 @app.post("/api/save-result")
 async def save_result(payload: dict):
+    """
+    Expected payload:
+    {
+      commit_hash, repo_name, commit_message, files_changed, labels,
+      compliance: { is_compliant, message, title, category, confidence },
+      risk: { risk_score, factors, message }
+    }
+    """
     if not app.state.db_pool:
         raise HTTPException(status_code=500, detail="Database not configured")
 
@@ -120,12 +128,7 @@ async def save_result(payload: dict):
             files_arr = payload.get("files_changed") or payload.get("files") or []
             labels_arr = payload.get("labels") or []
 
-            # 🔧 Ensure lists are JSON-encoded before saving
-            files_json = json.dumps(files_arr)
-            labels_json = json.dumps(labels_arr)
-            factors_json = json.dumps(risk.get("factors") or {})
-
-            # insert compliance
+            # ✅ Insert compliance (JSONB columns accept native Python lists)
             await conn.execute("""
                 INSERT INTO compliance_results
                 (commit_hash, repo_name, commit_message, files_changed, labels,
@@ -135,8 +138,8 @@ async def save_result(payload: dict):
                 payload.get("commit_hash"),
                 payload.get("repo_name"),
                 payload.get("commit_message"),
-                files_json,
-                labels_json,
+                files_arr,
+                labels_arr,
                 comp.get("is_compliant"),
                 comp.get("message"),
                 comp.get("title"),
@@ -144,7 +147,7 @@ async def save_result(payload: dict):
                 float(comp.get("confidence") or 0.0)
             )
 
-            # insert risk
+            # ✅ Insert risk
             await conn.execute("""
                 INSERT INTO risk_scores
                 (commit_hash, repo_name, risk_score, factors, risk_message)
@@ -153,11 +156,11 @@ async def save_result(payload: dict):
                 payload.get("commit_hash"),
                 payload.get("repo_name"),
                 float(risk.get("risk_score") or 0.0),
-                factors_json,
+                risk.get("factors") or {},  # pass as dict for JSONB
                 risk.get("message")
             )
-
     return {"status": "ok"}
+
 
 
 @app.get("/api/history")
