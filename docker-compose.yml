@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: sentinel
+      POSTGRES_PASSWORD: sentinelpass
+      POSTGRES_DB: sentinel
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./sentinel-backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./sentinel-backend:/app
+      - ./models:/app/models
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./sentinel-backend/.env
+    depends_on:
+      - postgres
+      - redis
+
+  worker:
+    build:
+      context: ./sentinel-backend
+    command: celery -A tasks worker --loglevel=info
+    volumes:
+      - ./sentinel-backend:/app
+      - ./models:/app/models
+    env_file:
+      - ./sentinel-backend/.env
+    depends_on:
+      - redis
+      - postgres
+
+volumes:
+  pgdata:
