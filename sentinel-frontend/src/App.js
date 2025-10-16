@@ -8,7 +8,7 @@ import {
   Link,
 } from "react-router-dom";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8000";
+const API_BASE = process.env.REACT_APP_API_BASE || "https://sentinel-backend-sdit.onrender.com";
 
 // ---------- small UI helpers ----------
 function Badge({ children, ok }) {
