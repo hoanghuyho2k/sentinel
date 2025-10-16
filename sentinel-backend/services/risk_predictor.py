@@ -27,19 +27,19 @@ def extract_features(payload: dict):
 
 def predict_risk_score(features: dict):
     if not MODEL_LOADED:
-        score = 100.0
-        if features["lines_changed"] > 100: score -= 20
-        elif features["lines_changed"] > 50: score -= 10
-        if features["touches_core"]: score -= 30
-        score -= features["prev_bugs"] * 5
-        if features["test_coverage"] < 80: score -= (80 - features["test_coverage"]) * 0.5
-        score = max(0.0, min(100.0, score))
+        safety = 100.0
+        if features["lines_changed"] > 100: safety -= 20
+        elif features["lines_changed"] > 50: safety -= 10
+        if features["touches_core"]: safety -= 30
+        safety -= features["prev_bugs"] * 5
+        if features["test_coverage"] < 80: safety -= (80 - features["test_coverage"]) * 0.5
+        safety = max(0.0, min(100.0, safety))
         # Convert to RISK (higher = more dangerous)
-        risk = 100.0 - score
-        return {"risk_score": risk, "factors": features, "message": f"Risk score (heuristic): {risk:.1f}% (score={score:.1f}%)"}
+        risk = 100.0 - safety
+        return {"risk_score": risk, "factors": features, "message": f"Risk score (heuristic): {risk:.1f}% (safety={safety:.1f}%)"}
     import pandas as pd
     row = pd.DataFrame([features])
     # dmat = xgb.DMatrix(row)
     pred = MODEL.predict(dmat)[0]
-    score = float(pred) * 100.0
+    safety = float(pred) * 100.0
     return {"risk_score": round(risk,2), "factors": features, "message": f"Risk score (model): {risk:.2f}%"}
