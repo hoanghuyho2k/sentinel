@@ -1,14 +1,18 @@
-
-
+:root {
+    --background-color: #ffffff;
+    --text-color: black;
+    --accent-color: red;
+    --accent-color-hover: orange;
+}
 /*Navbar base*/
 .navbar {
     background-color: var(--background-color);
-    text-color: var(--text-color);
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
     z-index: 1000;
     width: 100%;
-    text-color: var(--text-color)
+    margin-top: 0;
 }
 
 /*Flex container*/
@@ -38,6 +42,11 @@
     margin: 0;
     justify-content: center;
     gap: 2rem;
+    color: var(--text-color);
+}
+
+.navbar-links a {
+    color: var(--text-color);
 }
 
 /* BUTTONS */
