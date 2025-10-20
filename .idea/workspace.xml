@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7322ce0f-5c4f-47c4-88c8-3889d8dd4a45" name="Changes" comment="Adding dataRecord page">
+      <change afterPath="$PROJECT_DIR$/sentinel/src/data/reportData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/styles/Report.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sentinel/src/data/recordData.js" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/data/recordData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/src/pages/Reports.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/pages/Reports.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +26,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="recordData_v1" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -58,7 +61,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "recordData__v1",
+    "git-widget-placeholder": "Reports",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -125,7 +128,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760933513119</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Adding dataRecord page">
+      <option name="closed" value="true" />
+      <created>1760934176255</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1760934176255</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
