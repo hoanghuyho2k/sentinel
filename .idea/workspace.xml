@@ -4,23 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7322ce0f-5c4f-47c4-88c8-3889d8dd4a45" name="Changes" comment="App setup">
-      <change afterPath="$PROJECT_DIR$/sentinel/src/components/Navbar.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/Dashboard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/DataRecords.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/Login.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/NotFound.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/Reports.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/Settings.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/pages/Users.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/styles/Navbar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/styles/theme.css" afterDir="false" />
+    <list default="true" id="7322ce0f-5c4f-47c4-88c8-3889d8dd4a45" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/sentinel/src/data/dashboardData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/styles/Dashboard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sentinel/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sentinel/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/styles/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sentinel/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/styles/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/src/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/pages/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/src/styles/Navbar.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/styles/Navbar.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +28,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -50,7 +48,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="AISelfReview" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -60,22 +58,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JavaScript Debug.localhost:5173.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JavaScript Debug.localhost:5173.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Dashboard__v1",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/sentinel/src/styles" />
@@ -105,7 +104,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1760265701666</updated>
-      <workItem from="1760265702920" duration="13817000" />
+      <workItem from="1760265702920" duration="25276000" />
+      <workItem from="1760930107196" duration="1814000" />
     </task>
     <task id="LOCAL-00001" summary="App setup">
       <option name="closed" value="true" />
@@ -115,7 +115,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760268794695</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Adding Navbar">
+      <option name="closed" value="true" />
+      <created>1760321313684</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1760321313684</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -126,7 +134,15 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="168" />
+                  <entry key="Table.Default.Date.ColumnIdWidth" value="165" />
+                  <entry key="Table.GitHub.CommitStatus.ColumnIdWidth" value="164" />
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -134,6 +150,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="App setup" />
-    <option name="LAST_COMMIT_MESSAGE" value="App setup" />
+    <MESSAGE value="Adding Navbar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding Navbar" />
   </component>
 </project>

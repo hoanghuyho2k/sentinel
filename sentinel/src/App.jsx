@@ -1,5 +1,5 @@
-import './App.css'
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import './styles/App.css'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from './pages/Dashboard.jsx';
 import DataRecords from './pages/DataRecords.jsx';
 import Navbar from "./components/Navbar.jsx";
