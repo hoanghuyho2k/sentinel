@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7322ce0f-5c4f-47c4-88c8-3889d8dd4a45" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sentinel/src/data/dashboardData.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/styles/Dashboard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/data/recordData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/src/styles/dataRecords.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/styles/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/src/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/pages/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/src/pages/DataRecords.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/pages/DataRecords.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/src/pages/Reports.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/pages/Reports.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sentinel/src/styles/Navbar.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/styles/Navbar.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,7 +63,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Dashboard__v1",
+    "git-widget-placeholder": "recordData__v1",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -86,6 +84,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JavaScript Debug.localhost:5173" />
         <item itemvalue="JavaScript Debug.localhost:5173" />
       </list>
     </recent_temporary>

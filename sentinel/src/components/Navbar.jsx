@@ -8,7 +8,7 @@ export default function Navbar() {
             <div className="navbar-container">
 
                 {/*Logo*/}
-                <Link to="/" className="navbar-logo" style={{color: "lightblue", textDecoration: "none"}}>💻</Link>
+                <Link to="/" className="navbar-logo" style={{color: "lightblue", textDecoration: "none"}}>💻 Sentinel</Link>
 
                 {/*Link*/}
                 <ul className="navbar-links">
