@@ -150,25 +150,29 @@ async def save_result(payload: dict):
             comp = payload.get("compliance", {})
             risk = payload.get("risk", {})
             files_arr = payload.get("files_changed") or payload.get("files") or []
-            labels_arr = payload.get("labels") or []
 
-            # ✅ Convert lists/dicts to JSON strings
-            files_json = json.dumps(files_arr)
-            labels_json = json.dumps(labels_arr)
-            factors_json = json.dumps(risk.get("factors") or {})
-
+            # Insert into compliance_results
             row = await conn.fetchrow("""
                 INSERT INTO compliance_results
-                (commit_hash, repo_name, commit_message, files_changed, labels,
-                 is_compliant, compliance_message, compliance_title, category, confidence)
-                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+                (project, user_id, repo_url, commit_hash, repo_name, commit_message,
+                 files_changed, file_added, file_removed, freeze_request, feedback,
+                 labels, is_compliant, compliance_message, compliance_title,
+                 category, confidence)
+                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
                 RETURNING id
             """,
+                payload.get("project"),
+                payload.get("user_id"),
+                payload.get("repo_url"),
                 payload.get("commit_hash"),
                 payload.get("repo_name"),
                 payload.get("commit_message"),
-                files_json,
-                labels_json,
+                files_arr,
+                payload.get("file_added") or [],
+                payload.get("file_removed") or [],
+                bool(payload.get("freeze_request", False)),
+                payload.get("feedback"),
+                payload.get("labels") or [],
                 comp.get("is_compliant"),
                 comp.get("message"),
                 comp.get("title"),
@@ -177,6 +181,7 @@ async def save_result(payload: dict):
             )
             comp_id = row["id"]
 
+            # Insert associated risk score
             if risk:
                 await conn.execute("""
                     INSERT INTO risk_scores
@@ -187,7 +192,7 @@ async def save_result(payload: dict):
                     payload.get("commit_hash"),
                     payload.get("repo_name"),
                     float(risk.get("risk_score") or 0.0),
-                    factors_json,
+                    json.dumps(risk.get("factors") or {}),
                     risk.get("message")
                 )
 
@@ -201,43 +206,48 @@ async def save_result(payload: dict):
 # ------------------------------------------------------------
 @app.get("/api/history")
 async def get_history(limit: int = 100):
-    """Return recent Sentinel evaluations (joined compliance + risk)"""
     if not app.state.db_pool:
         raise HTTPException(status_code=500, detail="Database not configured")
 
     pool = app.state.db_pool
     async with pool.acquire() as conn:
         rows = await conn.fetch("""
-            SELECT c.id, c.commit_hash, c.repo_name, c.commit_message, c.files_changed,
-                   c.is_compliant, c.compliance_message, c.compliance_title,
-                   c.category, c.confidence,
-                   r.risk_score, r.factors, r.risk_message,
-                   c.created_at
-            FROM compliance_results c
-            LEFT JOIN risk_scores r ON c.id = r.compliance_id
-            ORDER BY c.created_at DESC
-            LIMIT $1
+           SELECT 
+              c.id, c.project, c.user_id AS "user", c.repo_url, c.commit_hash, 
+              c.repo_name, c.commit_message, c.files_changed, c.file_added, c.file_removed,
+              c.freeze_request, c.feedback, c.is_compliant, c.compliance_message,
+              c.category, c.confidence, r.risk_score, r.factors, r.risk_message, c.created_at
+           FROM compliance_results c
+           LEFT JOIN risk_scores r ON c.id = r.compliance_id
+           ORDER BY c.created_at DESC
+           LIMIT $1
         """, limit)
 
         result = []
         for r in rows:
             result.append({
+                "project": r["project"],
                 "id": r["id"],
+                "user": r["user"],
+                "repo_url": r["repo_url"],
                 "commit_hash": r["commit_hash"],
-                "repo_name": r["repo_name"],
                 "commit_message": r["commit_message"],
                 "files_changed": r["files_changed"],
+                "file_added": r["file_added"],
+                "file_removed": r["file_removed"],
+                "freeze_request": r["freeze_request"],
+                "feedback": r["feedback"],
                 "is_compliant": r["is_compliant"],
                 "compliance_message": r["compliance_message"],
-                "compliance_title": r["compliance_title"],
                 "category": r["category"],
-                "confidence": float(r["confidence"]) if r["confidence"] is not None else None,
-                "risk_score": float(r["risk_score"]) if r["risk_score"] is not None else 0.0,
+                "confidence": float(r["confidence"]) if r["confidence"] else None,
+                "risk_score": float(r["risk_score"]) if r["risk_score"] else None,
                 "factors": r["factors"],
-                "risk_message": r["risk_message"] or "No risk message",
-                "created_at": r["created_at"].isoformat()
+                "risk_message": r["risk_message"],
+                "created_at": r["created_at"].isoformat() if r["created_at"] else None
             })
         return result
+
 
 
 # ------------------------------------------------------------
