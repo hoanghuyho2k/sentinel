@@ -141,7 +141,25 @@ def risk_score_endpoint(payload: RiskInput):
 # ------------------------------------------------------------
 @app.post("/api/save-result")
 async def save_result(payload: dict):
-    """Save compliance + risk results to database."""
+    """
+    Save a combined compliance + risk result into the database.
+    Expected payload example:
+    {
+      "project": "Sentinel",
+      "user": "developerA",
+      "repo_url": "https://github.com/org/repo",
+      "commit_hash": "abc123",
+      "commit_message": "fix: resolve memory leak",
+      "files_changed": ["core/db.py", "core/utils.py"],
+      "file_added": ["new_module.py"],
+      "file_removed": [],
+      "freeze_request": false,
+      "feedback": "Looks good",
+      "compliance": { "freeze_request": true, "message": "Approved", "category": "bug_fix", "confidence": 0.95 },
+      "risk": { "risk_score": 85, "factors": { "lines_changed": 40, "prev_bugs": 1 }, "message": "Low risk" }
+    }
+    """
+
     if not app.state.db_pool:
         raise HTTPException(status_code=500, detail="Database not configured")
 
@@ -150,37 +168,35 @@ async def save_result(payload: dict):
         async with conn.transaction():
             comp = payload.get("compliance", {})
             risk = payload.get("risk", {})
-            files_arr = payload.get("files_changed") or payload.get("files") or []
 
-            # ✅ Insert compliance result with new columns
+            # Insert into compliance_results
             row = await conn.fetchrow("""
                 INSERT INTO compliance_results
-                (project, user_id, repo_url, commit_hash, repo_name,
-                 commit_message, files_changed, file_added, file_removed,
-                 freeze_request, feedback, category, confidence,
-                 compliance_message, compliance_title)
-                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
+                (project, user_id, repo_url, commit_hash, commit_message,
+                 files_changed, file_added, file_removed, freeze_request,
+                 feedback, compliance_message, compliance_title, category, confidence)
+                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
                 RETURNING id
             """,
                 payload.get("project"),
-                payload.get("user_id"),
+                payload.get("user"),
                 payload.get("repo_url"),
                 payload.get("commit_hash"),
-                payload.get("repo_name"),
                 payload.get("commit_message"),
-                files_arr,
-                payload.get("file_added") or [],
-                payload.get("file_removed") or [],
-                payload.get("freeze_request", False),
+                json.dumps(payload.get("files_changed") or []),
+                json.dumps(payload.get("file_added") or []),
+                json.dumps(payload.get("file_removed") or []),
+                bool(payload.get("freeze_request", False)),
                 payload.get("feedback"),
-                comp.get("category"),
-                float(comp.get("confidence") or 0.0),
                 comp.get("message"),
-                comp.get("title")
+                comp.get("title"),
+                comp.get("category"),
+                float(comp.get("confidence") or 0.0)
             )
+
             comp_id = row["id"]
 
-            # ✅ Insert risk score record
+            # Insert risk data (if provided)
             if risk:
                 await conn.execute("""
                     INSERT INTO risk_scores
@@ -189,13 +205,14 @@ async def save_result(payload: dict):
                 """,
                     comp_id,
                     payload.get("commit_hash"),
-                    payload.get("repo_name"),
+                    payload.get("repo_name") or payload.get("repo_url"),
                     float(risk.get("risk_score") or 0.0),
                     json.dumps(risk.get("factors") or {}),
                     risk.get("message")
                 )
 
     return {"status": "ok"}
+
 
 
 # ------------------------------------------------------------
