@@ -172,7 +172,7 @@ async def save_result(payload: dict):
             # Insert into compliance_results
             row = await conn.fetchrow("""
                 INSERT INTO compliance_results
-                (project, user_id, repo_url, commit_hash, commit_message,
+                (project, user, repo_url, commit_hash, commit_message,
                  files_changed, file_added, file_removed, freeze_request,
                  feedback, compliance_message, compliance_title, category, confidence)
                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
