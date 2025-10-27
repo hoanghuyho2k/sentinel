@@ -220,23 +220,25 @@ async def save_result(payload: dict):
 # ------------------------------------------------------------
 @app.get("/api/history")
 async def get_history(limit: int = 100):
-    """Fetch last N compliance results with risk data."""
+    """
+    Returns the most recent commit compliance + risk results.
+    Includes extended metadata (project, user, repo_url, etc.)
+    """
     if not app.state.db_pool:
         raise HTTPException(status_code=500, detail="Database not configured")
 
     pool = app.state.db_pool
     async with pool.acquire() as conn:
         rows = await conn.fetch("""
-           SELECT 
-              c.id, c.project, c.user_id AS user,
-              c.repo_url, c.commit_hash, c.repo_name,
-              c.commit_message, c.files_changed, c.file_added, c.file_removed,
-              c.freeze_request, c.feedback, c.category, c.confidence,
-              r.risk_score, r.factors, r.risk_message, c.created_at
-           FROM compliance_results c
-           LEFT JOIN risk_scores r ON c.id = r.compliance_id
-           ORDER BY c.created_at DESC
-           LIMIT $1
+            SELECT c.id, c.project, c.user_id AS user, c.repo_url, c.commit_hash,
+                   c.commit_message, c.files_changed, c.file_added, c.file_removed,
+                   c.freeze_request, c.feedback,
+                   c.compliance_message, c.category, c.confidence,
+                   r.risk_score, r.factors, r.risk_message, c.created_at
+            FROM compliance_results c
+            LEFT JOIN risk_scores r ON c.id = r.compliance_id
+            ORDER BY c.created_at DESC
+            LIMIT $1
         """, limit)
 
         result = []
@@ -248,19 +250,22 @@ async def get_history(limit: int = 100):
                 "repo_url": r["repo_url"],
                 "commit_hash": r["commit_hash"],
                 "commit_message": r["commit_message"],
-                "files_changed": r["files_changed"],
-                "file_added": r["file_added"],
-                "file_removed": r["file_removed"],
+                # Parse JSON arrays safely
+                "files_changed": json.loads(r["files_changed"]) if r["files_changed"] else [],
+                "file_added": json.loads(r["file_added"]) if r["file_added"] else [],
+                "file_removed": json.loads(r["file_removed"]) if r["file_removed"] else [],
                 "freeze_request": r["freeze_request"],
                 "feedback": r["feedback"],
+                "compliance_message": r["compliance_message"],
                 "category": r["category"],
-                "confidence": float(r["confidence"]) if r["confidence"] else None,
-                "risk_score": float(r["risk_score"]) if r["risk_score"] else None,
-                "factors": r["factors"],
+                "confidence": float(r["confidence"]) if r["confidence"] is not None else None,
+                "risk_score": float(r["risk_score"]) if r["risk_score"] is not None else None,
+                "factors": json.loads(r["factors"]) if r["factors"] else {},
                 "risk_message": r["risk_message"],
-                "created_at": r["created_at"].isoformat()
+                "created_at": r["created_at"].isoformat() if r["created_at"] else None
             })
         return result
+
 
 
 
