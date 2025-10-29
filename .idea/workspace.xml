@@ -4,16 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7322ce0f-5c4f-47c4-88c8-3889d8dd4a45" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sentinel/src/data/dashboardData.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/src/styles/Dashboard.css" afterDir="false" />
+    <list default="true" id="7322ce0f-5c4f-47c4-88c8-3889d8dd4a45" name="Changes" comment="Adding dataRecord page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/styles/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/src/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/pages/Dashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/src/styles/Navbar.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/src/styles/Navbar.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +22,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="recordData_v1" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -58,23 +50,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JavaScript Debug.localhost:5173.executor": "Debug",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Dashboard__v1",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.localhost:5173.executor&quot;: &quot;Debug&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Reports&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/sentinel/src/styles" />
@@ -86,6 +78,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JavaScript Debug.localhost:5173" />
         <item itemvalue="JavaScript Debug.localhost:5173" />
       </list>
     </recent_temporary>
@@ -106,6 +99,8 @@
       <updated>1760265701666</updated>
       <workItem from="1760265702920" duration="25276000" />
       <workItem from="1760930107196" duration="1814000" />
+      <workItem from="1761483737283" duration="1780000" />
+      <workItem from="1761545952773" duration="323000" />
     </task>
     <task id="LOCAL-00001" summary="App setup">
       <option name="closed" value="true" />
@@ -123,7 +118,31 @@
       <option name="project" value="LOCAL" />
       <updated>1760321313684</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Adding dataRecord page">
+      <option name="closed" value="true" />
+      <created>1760933513119</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1760933513119</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Adding dataRecord page">
+      <option name="closed" value="true" />
+      <created>1760934176255</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1760934176255</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Adding dataRecord page">
+      <option name="closed" value="true" />
+      <created>1760999213521</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1760999213521</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -151,6 +170,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="App setup" />
     <MESSAGE value="Adding Navbar" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding Navbar" />
+    <MESSAGE value="Adding dataRecord page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding dataRecord page" />
   </component>
 </project>

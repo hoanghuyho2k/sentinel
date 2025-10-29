@@ -1,0 +1,100 @@
+.reports-page {
+    padding: 2rem;
+    font-family: 'Inter', sans-serif;
+}
+
+h2 {
+    margin-bottom: 1rem;
+    color: #1e293b;
+}
+
+/* Summary Cards */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background: #f8fafc;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    padding: 1rem;
+}
+
+.card h3 {
+    color: #334155;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.card p {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* Charts */
+.charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.chart-card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    padding: 1rem;
+}
+
+/* Table */
+.project-summary table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.project-summary th,
+.project-summary td {
+    padding: 0.8rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.project-summary th {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+/* AI Insights */
+.ai-insights {
+    background: #fefce8;
+    padding: 1rem;
+    border-left: 4px solid #facc15;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+/* Export Buttons */
+.export-section {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.export-section button {
+    padding: 0.6rem 1.2rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.export-section button:hover {
+    background: #1d4ed8;
+}

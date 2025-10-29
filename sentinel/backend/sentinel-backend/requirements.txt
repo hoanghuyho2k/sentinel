@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+requests
+celery[redis]
+redis
+SQLAlchemy
+asyncpg
+alembic
+pydantic
+python-jose
+# ML dependencies (add later when needed)
+# transformers
+# torch
+# xgboost
+# boto3
