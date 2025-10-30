@@ -1,110 +1,149 @@
-import '../styles/Report.css'
-import {reportsData} from "../data/reportData.js";
-import {LineChart, Line, XAxis, CartesianGrid, Tooltip, BarChart, Bar, ResponsiveContainer, YAxis} from "recharts";
-
-
+import "../styles/Report.css";
+import {useEffect, useState} from "react";
+import {fetchHistory, fetchInsights} from "../api";
+import {
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+    BarChart, Bar, ResponsiveContainer, PieChart, Pie, Cell
+} from "recharts";
 
 function Reports() {
+    const [records, setRecords] = useState([]);
+    const [insight, setInsight] = useState("Loading AI insights...");
 
-    const {projects, riskTrend, contributorStats} = reportsData;
+    useEffect(() => {
+        async function loadData() {
+            const data = await fetchHistory();
+            setRecords(data || []);
+
+            const ai = await fetchInsights();
+            setInsight(ai.insight || "No insight available.")
+        }
+
+        loadData();
+    }, []);
+
+    // ----- Data Aggregation -----
+    const totalCommits = records.length;
+    const avgRisk = records.reduce((a, b) => a + b.risk_score, 0) / (records.length || 1);
+    const avgConfidence = records.reduce((a, b) => a + b.confident_score, 0) / (records.length || 1);
+    const freezeCount = records.filter(r => r.freeze_request).length;
+
+    const riskByProject = Object.entries(
+        records.reduce((acc, r) => {
+            acc[r.project] = acc[r.project] || [];
+            acc[r.project].push(r.risk_score);
+            return acc;
+        }, {})
+    ).map(([project, arr]) => ({
+        project,
+        avgRisk: (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1),
+    }));
+
+    const COLORS = ["#2563eb", "#f97316", "#22c55e", "#a855f7", "#e11d48"];
 
     return (
         <div className="reports-page">
-            <h2>System Reports</h2>
+            <h2>📊 Sentinel Reports</h2>
 
-            {/*Summary*/}
+            {/* Summary Cards */}
             <section className="summary-cards">
-                <div className="card">
-                    <h3>Total Project</h3>
-                    <p>{projects.length}</p>
-                </div>
-                <div className="card">
-                    <h3>Total Contributors</h3>
-                    <p>{contributorStats.total}</p>
-                </div>
-                <div className="card">
-                    <h3>Average Risk Score</h3>
-                    <p>{
-                        projects.reduce((acc, project) => acc + project.risk_score, 0) / projects.length
-                    }</p>
-                </div>
-                <div className="card">
-                    <h3>Freeze Requests</h3>
-                    <p>{
-                        projects.reduce((acc, project) => acc + (project.freeze_request ? 1 : 0), 0)
-                    }</p>
-                </div>
+                <div className="card"><h3>Total Commits</h3><p>{totalCommits}</p></div>
+                <div className="card"><h3>Avg Risk</h3><p>{avgRisk.toFixed(1)}</p></div>
+                <div className="card"><h3>Avg Confidence</h3><p>{avgConfidence.toFixed(1)}%</p></div>
+                <div className="card"><h3>Freeze Requests</h3><p>{freezeCount}</p></div>
             </section>
 
-            {/*Charts*/}
+            {/* Charts */}
             <section className="charts">
                 <div className="chart-card">
-                    <h3>Risk Trend (Last 7 days)</h3>
+                    <h3>Risk by Project</h3>
                     <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={riskTrend}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip />
-                            <Line type="monotone" dataKey="avgRisk" stroke="#f97316" strokeWidth={2} />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
-                <div className="chart-card">
-                    <h3>Commits per Contributor</h3>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={contributorStats}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="user" />
-                            <YAxis />
-                            <Tooltip />
-                            <Bar dataKey="commits" fill="#2563eb" />
+                        <BarChart data={riskByProject}>
+                            <CartesianGrid strokeDasharray="3 3"/>
+                            <XAxis dataKey="project"/>
+                            <YAxis/>
+                            <Tooltip/>
+                            <Bar dataKey="avgRisk">
+                                {riskByProject.map((_, i) => (
+                                    <Cell key={i} fill={COLORS[i % COLORS.length]}/>
+                                ))}
+                            </Bar>
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
+
+                <div className="chart-card">
+                    <h3>Freeze Requests Distribution</h3>
+                    <ResponsiveContainer width="100%" height={300}>
+                        <PieChart>
+                            <Pie
+                                data={[
+                                    {name: "Freeze Requests", value: freezeCount},
+                                    {name: "Normal Commits", value: totalCommits - freezeCount},
+                                ]}
+                                dataKey="value"
+                                nameKey="name"
+                                cx="50%"
+                                cy="50%"
+                                outerRadius={100}
+                                label
+                            >
+                                <Cell fill="#f97316"/>
+                                <Cell fill="#22c55e"/>
+                            </Pie>
+                            <Tooltip/>
+                            <Legend/>
+                        </PieChart>
+                    </ResponsiveContainer>
+                </div>
             </section>
 
-            {/*Table Summary*/}
+            {/* AI Insights */}
+            <div className="ai-insights">
+                <h3>🤖 AI Insights</h3>
+                <p>{insight}</p>
+            </div>
+
+            {/* Table */}
             <section className="project-summary">
-                <h3>Project Performance Summary</h3>
+                <h3>Project Summary</h3>
                 <table>
                     <thead>
                     <tr>
                         <th>Project</th>
-                        <th>Total Commits</th>
                         <th>Avg Risk</th>
-                        <th>Avg Confidence</th>
-                        <th>Freeze Requests</th>
+                        <th>Commits</th>
+                        <th>Freeze</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {projects.map((p, i) => (
+                    {riskByProject.map((p, i) => (
                         <tr key={i}>
-                            <td>{p.name}</td>
-                            <td>{p.totalCommits}</td>
+                            <td>{p.project}</td>
                             <td>{p.avgRisk}</td>
-                            <td>{p.avgConfidence}%</td>
-                            <td>{p.freezeRequests}</td>
+                            <td>{records.filter(r => r.project === p.project).length}</td>
+                            <td>{records.filter(r => r.project === p.project && r.freeze_request).length}</td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
             </section>
 
-            {/*Optional AI Insight*/}
-            <section className="ai-insights">
-                <h3>AI Insights</h3>
-                <p>⚠️ Backend and ModelTrainer show higher risk trends. Recommend reviewing recent commits before next deployment.</p>
-            </section>
-
-            {/* Export Buttons */}
-            <section className="export-section">
-                <button>📄 Export as PDF</button>
-                <button>📊 Export as CSV</button>
-            </section>
-
+            {/* Export */}
+            <div className="export-section">
+                <button
+                    onClick={() => window.open("http://localhost:8000/api/export/csv", "_blank")}
+                >
+                    📄 Export CSV
+                </button>
+                <button
+                    onClick={() => window.open("http://localhost:8000/api/export/pdf", "_blank")}
+                >
+                    🧾 Export PDF
+                </button>
+            </div>
         </div>
-    )
+    );
 }
 
 export default Reports;

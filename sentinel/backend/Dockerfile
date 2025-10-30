@@ -8,10 +8,13 @@ WORKDIR /app
 COPY . /app
 
 # Install Python dependencies
-RUN pip install --no-cache-dir fastapi uvicorn
+RUN pip install --no-cache-dir \
+    fastapi \
+    uvicorn \
+    reportlab
 
 # Expose FastAPI default port
 EXPOSE 8000
 
-# Run backend
+# Run backend with live reload (for dev mode)
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

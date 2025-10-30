@@ -1,70 +1,212 @@
 .data-records-page {
     padding: 2rem;
+    font-family: "Inter", sans-serif;
+    width: 100%;
+    box-sizing: border-box;
 }
 
+h2 {
+    margin-bottom: 1rem;
+    color: #1e293b;
+}
+
+.loading {
+    text-align: center;
+    margin-top: 3rem;
+    color: #475569;
+}
+
+/* ====== TABLE ====== */
 .records-table {
     width: 100%;
     border-collapse: collapse;
     background: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     border-radius: 10px;
     overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
 
 .records-table th,
 .records-table td {
-    padding: 0.8rem;
+    padding: 0.9rem;
     text-align: left;
     border-bottom: 1px solid #e2e8f0;
 }
 
 .records-table th {
-    background: #f1f5f9;
+    background: #f8fafc;
     color: #334155;
+    font-weight: 600;
 }
 
 .records-table tr:hover {
-    background: #f9fafb;
+    background-color: #f1f5f9;
 }
 
-/* Modal */
+.freeze-row {
+    background-color: #fff7ed !important;
+}
+
+.high-risk td:nth-child(4) {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.records-table button {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.records-table button:hover {
+    background: #1d4ed8;
+}
+
+/* ====== MODAL ====== */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 50;
 }
 
 .modal {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    width: 400px;
-    max-height: 80vh;
+    background: #ffffff;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    width: 450px;
+    max-height: 85vh;
     overflow-y: auto;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+    animation: scaleIn 0.25s ease-in-out;
 }
 
-.modal h3 {
-    margin-top: 0;
-    color: #1e293b;
+/* Header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
 }
 
-.modal button {
+.tag {
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.tag-freeze {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.tag-normal {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+/* Sections */
+.modal-section {
+    margin-bottom: 1.2rem;
+}
+
+.modal-section h4 {
+    margin-bottom: 0.3rem;
+    color: #334155;
+    border-left: 3px solid #2563eb;
+    padding-left: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.modal-section p {
+    margin: 0.4rem 0;
+    color: #475569;
+}
+
+.modal-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.3rem 0;
+}
+
+.modal-section li {
+    padding: 0.2rem 0;
+    color: #475569;
+}
+
+/* Footer */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
     margin-top: 1rem;
+}
+
+.action-btn {
+    background: #0ea5e9;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.action-btn:hover {
+    background: #0284c7;
+}
+
+.close-btn {
     background: #2563eb;
     color: white;
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
 }
 
-.modal button:hover {
+.close-btn:hover {
     background: #1d4ed8;
+}
+
+/* Animation */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 768px) {
+    .records-table th,
+    .records-table td {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+    }
+
+    .modal {
+        width: 90%;
+        padding: 1rem;
+    }
 }

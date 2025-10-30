@@ -4,28 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7322ce0f-5c4f-47c4-88c8-3889d8dd4a45" name="Changes" comment="Adding docker and fix backend">
-      <change afterPath="$PROJECT_DIR$/sentinel/backend/services/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/frontend/src/api.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sentinel/frontend/src/components/HistoryViewer.jsx" afterDir="false" />
+    <list default="true" id="7322ce0f-5c4f-47c4-88c8-3889d8dd4a45" name="Changes" comment="fixing folder structure, connecting frontend and backend">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/backend/sentinel-backend/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/backend/sentinel-backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/backend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/backend/sentinel-backend/services/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/backend/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/backend/sentinel-backend/services/compliance_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/backend/services/compliance_checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/backend/sentinel-backend/services/risk_predictor.py" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/backend/services/risk_predictor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/backend/sentinel-backend/tasks.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/data/prototype.json" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/backend/data/prototype.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/frontend/DockerFile" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/DockerFile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/frontend/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/backend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/backend/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/backend/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/components/HistoryViewer.jsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/components/Navbar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/pages/Dashboard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/styles/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/styles/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/styles/Dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/styles/Dashboard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/styles/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/styles/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentinel/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/pages/DataRecords.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/pages/DataRecords.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/pages/Reports.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/pages/Reports.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/styles/Report.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/styles/Report.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/styles/dataRecords.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/styles/dataRecords.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +116,7 @@
       <workItem from="1761545952773" duration="323000" />
       <workItem from="1761696656410" duration="15244000" />
       <workItem from="1761807663094" duration="2042000" />
-      <workItem from="1761823772222" duration="3561000" />
+      <workItem from="1761823772222" duration="7406000" />
     </task>
     <task id="LOCAL-00001" summary="App setup">
       <option name="closed" value="true" />
@@ -176,7 +166,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761803619995</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fixing folder structure, connecting frontend and backend">
+      <option name="closed" value="true" />
+      <created>1761827635245</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1761827635245</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,6 +210,7 @@
     <MESSAGE value="Adding Navbar" />
     <MESSAGE value="Adding dataRecord page" />
     <MESSAGE value="Adding docker and fix backend" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding docker and fix backend" />
+    <MESSAGE value="fixing folder structure, connecting frontend and backend" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing folder structure, connecting frontend and backend" />
   </component>
 </project>

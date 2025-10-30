@@ -16,7 +16,6 @@ export default function Navbar() {
                     <li><Link to="/data-record" style={{color: "lightblue", textDecoration: "none"}}>Data Records</Link>
                     </li>
                     <li><Link to="/reports" style={{color: "lightblue", textDecoration: "none"}}>Reports</Link></li>
-                    <li><Link to="/history" style={{color: "lightblue", textDecoration: "none"}}>History</Link></li>
                 </ul>
 
                 {/*Buttons*/}
