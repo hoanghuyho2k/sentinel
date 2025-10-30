@@ -1,27 +1,39 @@
+/* 🌐 Fullscreen Dashboard Layout */
 .dashboard-page {
-    padding: 2rem;
+    width: 100vw;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
 }
 
-h2 {
-    margin-bottom: 1rem;
-    color: #1e293b;
-}
-
-/* Summary Cards */
-.summary-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+/* 🧭 Title */
+.dashboard-page h2 {
+    text-align: left;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 4rem;
     margin-bottom: 2rem;
 }
 
+/* 💠 Summary Cards */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
 .card {
-    background: #f8fafc;
+    background: #ffffff;
     border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
     text-align: center;
-    padding: 1rem;
+    padding: 1.5rem;
     transition: transform 0.2s ease;
 }
 
@@ -30,59 +42,102 @@ h2 {
 }
 
 .card h3 {
-    color: #334155;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
+    color: #475569;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
 }
 
 .card p {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
     font-weight: 600;
-    color: #0f172a;
+    color: #1e293b;
 }
 
-/* Charts Section */
-.charts {
+/* 📊 Charts Section — full width with 3 columns */
+.charts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 2rem;
-    margin-bottom: 2rem;
+    width: 100vw;
+    max-width: 100%;
+    margin: 0 -2rem 3rem -2rem;
+    box-sizing: border-box;
+    padding: 0 2rem;
 }
 
 .chart-card {
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    padding: 1rem;
+    width: 100%;
 }
 
 .chart-card h3 {
-    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
     color: #334155;
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
-/* Table Section */
+/* 🧾 Recent Commits */
+.recent-commits {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    margin-bottom: 3rem;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.recent-commits h3 {
+    color: #334155;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
 .recent-commits table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 1rem;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
+    font-size: 0.95rem;
 }
 
 .recent-commits th,
 .recent-commits td {
-    padding: 0.8rem;
+    padding: 0.75rem 1rem;
     text-align: left;
     border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
 }
 
 .recent-commits th {
     background-color: #f1f5f9;
-    color: #334155;
+    color: #475569;
+    font-weight: 600;
+}
+
+.recent-commits td {
+    color: #1e293b;
 }
 
 .recent-commits tr:hover {
     background-color: #f9fafb;
+}
+
+/* 📱 Responsive Layout */
+@media (max-width: 1200px) {
+    .charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-card {
+        height: auto;
+    }
 }

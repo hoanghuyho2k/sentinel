@@ -8,6 +8,7 @@ import Users from "./pages/Users.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Login from "./pages/Login.jsx";
 import Settings from "./pages/Settings.jsx";
+import HistoryViewer from "./components/HistoryViewer.jsx";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/data-record" element={<DataRecords />} />
                 <Route path="/reports" element={<Reports />} />
+                <Route path="/history" element={<HistoryViewer />} />
                 <Route path="/users" element={<Users />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/settings" element={<Settings />} />

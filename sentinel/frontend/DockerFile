@@ -1,19 +1,20 @@
-# ---- FRONTEND (React + Vite) ----
+# ===== Frontend Dockerfile =====
 FROM node:22-alpine
 
+# Set working directory
 WORKDIR /app
 
-# Copy dependency files first
+# Copy package files first (for caching)
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci || npm install
+RUN npm install
 
-# Copy rest of app
+# Copy rest of frontend
 COPY . .
 
-# Expose Vite port
+# Expose Vite dev server port
 EXPOSE 5173
 
-# Run Vite explicitly
-CMD ["npx", "vite", "--host"]
+# Start frontend in dev mode
+CMD ["npm", "run", "dev", "--", "--host"]
