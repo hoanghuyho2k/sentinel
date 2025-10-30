@@ -5,25 +5,54 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional
 from dotenv import load_dotenv
-import asyncpg
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from contextlib import asynccontextmanager
+import asyncpg
 
 # Internal logic
 from services.compliance_checker import check_compliance
 from services.risk_predictor import predict_risk_score, extract_features
 
 # ------------------------------------------------------------
-# Load environment and app setup
+# Environment and setup
 # ------------------------------------------------------------
 load_dotenv()
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "../../data")
 
-app = FastAPI(title="Sentinel Core API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Manage database lifecycle safely."""
+    database_url = os.getenv("DATABASE_URL")
+    if database_url:
+        if "+asyncpg" in database_url:
+            database_url = database_url.replace("+asyncpg", "")
+        if "render.com" in database_url and "sslmode" not in database_url:
+            database_url += "?sslmode=require"
+        try:
+            app.state.db_pool = await asyncpg.create_pool(database_url)
+            print("✅ Database connection established")
+        except Exception as e:
+            print(f"❌ Database connection failed: {e}")
+            app.state.db_pool = None
+    else:
+        print("⚠️ DATABASE_URL not set — running in local demo mode")
+        app.state.db_pool = None
 
-# Allow local + Render frontend
+    yield  # Application runs here
+
+    if app.state.db_pool:
+        await app.state.db_pool.close()
+        print("🧹 Database connection closed")
+
+app = FastAPI(title="Sentinel Core API", lifespan=lifespan)
+
+# Allow local frontend (Vite, Render, etc.)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "https://sentinel-frontend-c2ph.onrender.com",
@@ -34,38 +63,6 @@ app.add_middleware(
 )
 
 # ------------------------------------------------------------
-# Database connection
-# ------------------------------------------------------------
-@app.on_event("startup")
-async def startup():
-    database_url = os.getenv("DATABASE_URL")
-
-    if database_url:
-        # Render compatibility: remove async driver prefix if present
-        if "+asyncpg" in database_url:
-            database_url = database_url.replace("+asyncpg", "")
-        # Render requires SSL
-        if "render.com" in database_url and "sslmode" not in database_url:
-            database_url += "?sslmode=require"
-
-        try:
-            app.state.db_pool = await asyncpg.create_pool(database_url)
-            print("✅ Database connection established")
-        except Exception as e:
-            print(f"❌ Database connection failed: {e}")
-            raise e
-    else:
-        print("⚠️ DATABASE_URL not set")
-        app.state.db_pool = None
-
-
-@app.on_event("shutdown")
-async def shutdown():
-    if app.state.db_pool:
-        await app.state.db_pool.close()
-
-
-# ------------------------------------------------------------
 # Pydantic input models
 # ------------------------------------------------------------
 class ComplianceInput(BaseModel):
@@ -74,7 +71,6 @@ class ComplianceInput(BaseModel):
     files: Optional[List[str]] = []
     labels: Optional[List[str]] = []
 
-
 class RiskInput(BaseModel):
     commit_message: str
     code_snippet: Optional[str] = None
@@ -82,7 +78,6 @@ class RiskInput(BaseModel):
     lines_changed: Optional[int] = 0
     prev_bugs: Optional[int] = 0
     test_coverage: Optional[int] = 100
-
 
 # ------------------------------------------------------------
 # Health check
@@ -106,9 +101,8 @@ async def health():
         "timestamp": datetime.utcnow().isoformat(),
     }
 
-
 # ------------------------------------------------------------
-# API: Compliance Check
+# Compliance and Risk APIs
 # ------------------------------------------------------------
 @app.post("/api/compliance-check")
 def compliance_check_endpoint(payload: ComplianceInput):
@@ -120,10 +114,6 @@ def compliance_check_endpoint(payload: ComplianceInput):
     )
     return result
 
-
-# ------------------------------------------------------------
-# API: Risk Score
-# ------------------------------------------------------------
 @app.post("/api/risk-score")
 def risk_score_endpoint(payload: RiskInput):
     features = extract_features({
@@ -135,112 +125,90 @@ def risk_score_endpoint(payload: RiskInput):
     risk = predict_risk_score(features)
     return risk
 
+# ------------------------------------------------------------
+# Local Data API (Prototype)
+# ------------------------------------------------------------
+@app.get("/api/prototype")
+async def get_prototype():
+    """Return local prototype.json for frontend demo."""
+    file_path = os.path.join(DATA_DIR, "prototype.json")
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="prototype.json not found")
+    with open(file_path, "r") as f:
+        data = json.load(f)
+    return data
 
 # ------------------------------------------------------------
-# API: Save combined result
+# Save combined result (database)
 # ------------------------------------------------------------
 @app.post("/api/save-result")
 async def save_result(payload: dict):
-    """
-    Save a combined compliance + risk result into the database.
-    Expected payload example:
-    {
-      "project": "Sentinel",
-      "user": "developerA",
-      "repo_url": "https://github.com/org/repo",
-      "commit_hash": "abc123",
-      "commit_message": "fix: resolve memory leak",
-      "files_changed": ["core/db.py", "core/utils.py"],
-      "file_added": ["new_module.py"],
-      "file_removed": [],
-      "freeze_request": false,
-      "feedback": "Looks good",
-      "compliance": { "freeze_request": true, "message": "Approved", "category": "bug_fix", "confidence": 0.95 },
-      "risk": { "risk_score": 85, "factors": { "lines_changed": 40, "prev_bugs": 1 }, "message": "Low risk" }
-    }
-    """
-
     if not app.state.db_pool:
         raise HTTPException(status_code=500, detail="Database not configured")
-
     pool = app.state.db_pool
     async with pool.acquire() as conn:
         async with conn.transaction():
             comp = payload.get("compliance", {})
             risk = payload.get("risk", {})
-
-            # Insert into compliance_results
             row = await conn.fetchrow("""
-                INSERT INTO compliance_results
-                (project, user_id, repo_url, commit_hash, commit_message,
-                 files_changed, file_added, file_removed, freeze_request,
-                 feedback, compliance_message, compliance_title, category, confidence)
-                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
-                RETURNING id
-            """,
-                payload.get("project"),
-                payload.get("user"),
-                payload.get("repo_url"),
-                payload.get("commit_hash"),
-                payload.get("commit_message"),
-                json.dumps(payload.get("files_changed") or []),
-                json.dumps(payload.get("file_added") or []),
-                json.dumps(payload.get("file_removed") or []),
-                bool(payload.get("freeze_request", False)),
-                payload.get("feedback"),
-                comp.get("message"),
-                comp.get("title"),
-                comp.get("category"),
-                float(comp.get("confidence") or 0.0)
-            )
-
+                                      INSERT INTO compliance_results
+                                      (project, user_id, repo_url, commit_hash, commit_message,
+                                       files_changed, file_added, file_removed, freeze_request,
+                                       feedback, compliance_message, compliance_title, category, confidence)
+                                      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+                                          RETURNING id
+                                      """,
+                                      payload.get("project"),
+                                      payload.get("user"),
+                                      payload.get("repo_url"),
+                                      payload.get("commit_hash"),
+                                      payload.get("commit_message"),
+                                      json.dumps(payload.get("files_changed") or []),
+                                      json.dumps(payload.get("file_added") or []),
+                                      json.dumps(payload.get("file_removed") or []),
+                                      bool(payload.get("freeze_request", False)),
+                                      payload.get("feedback"),
+                                      comp.get("message"),
+                                      comp.get("title"),
+                                      comp.get("category"),
+                                      float(comp.get("confidence") or 0.0)
+                                      )
             comp_id = row["id"]
-
-            # Insert risk data (if provided)
             if risk:
                 await conn.execute("""
-                    INSERT INTO risk_scores
-                    (compliance_id, commit_hash, repo_name, risk_score, factors, risk_message)
-                    VALUES ($1,$2,$3,$4,$5,$6)
-                """,
-                    comp_id,
-                    payload.get("commit_hash"),
-                    payload.get("repo_name") or payload.get("repo_url"),
-                    float(risk.get("risk_score") or 0.0),
-                    json.dumps(risk.get("factors") or {}),
-                    risk.get("message")
-                )
-
+                                   INSERT INTO risk_scores
+                                   (compliance_id, commit_hash, repo_name, risk_score, factors, risk_message)
+                                   VALUES ($1,$2,$3,$4,$5,$6)
+                                   """,
+                                   comp_id,
+                                   payload.get("commit_hash"),
+                                   payload.get("repo_name") or payload.get("repo_url"),
+                                   float(risk.get("risk_score") or 0.0),
+                                   json.dumps(risk.get("factors") or {}),
+                                   risk.get("message")
+                                   )
     return {"status": "ok"}
 
-
-
 # ------------------------------------------------------------
-# API: History
+# History API
 # ------------------------------------------------------------
 @app.get("/api/history")
 async def get_history(limit: int = 100):
-    """
-    Returns the most recent commit compliance + risk results.
-    Includes extended metadata (project, user, repo_url, etc.)
-    """
     if not app.state.db_pool:
         raise HTTPException(status_code=500, detail="Database not configured")
-
     pool = app.state.db_pool
     async with pool.acquire() as conn:
         rows = await conn.fetch("""
-            SELECT c.id, c.project, c.user_id AS user, c.repo_url, c.commit_hash,
+                                SELECT c.id, c.project, c.user_id AS user, c.repo_url, c.commit_hash,
                    c.commit_message, c.files_changed, c.file_added, c.file_removed,
                    c.freeze_request, c.feedback,
                    c.compliance_message, c.category, c.confidence,
                    r.risk_score, r.factors, r.risk_message, c.created_at
-            FROM compliance_results c
-            LEFT JOIN risk_scores r ON c.id = r.compliance_id
-            ORDER BY c.created_at DESC
-            LIMIT $1
-        """, limit)
-
+                                FROM compliance_results c
+                                    LEFT JOIN risk_scores r ON c.id = r.compliance_id
+                                ORDER BY c.created_at DESC
+                                    LIMIT $1
+                                """, limit)
         result = []
         for r in rows:
             result.append({
@@ -250,7 +218,6 @@ async def get_history(limit: int = 100):
                 "repo_url": r["repo_url"],
                 "commit_hash": r["commit_hash"],
                 "commit_message": r["commit_message"],
-                # Parse JSON arrays safely
                 "files_changed": json.loads(r["files_changed"]) if r["files_changed"] else [],
                 "file_added": json.loads(r["file_added"]) if r["file_added"] else [],
                 "file_removed": json.loads(r["file_removed"]) if r["file_removed"] else [],
@@ -266,26 +233,21 @@ async def get_history(limit: int = 100):
             })
         return result
 
-
-
-
-
 # ------------------------------------------------------------
-# API: Feedback Chat
+# Feedback Chat
 # ------------------------------------------------------------
 @app.post("/api/feedback")
 async def post_feedback(payload: dict):
     if not app.state.db_pool:
         raise HTTPException(status_code=500, detail="Database not configured")
-
     pool = app.state.db_pool
     async with pool.acquire() as conn:
         await conn.execute("""
-            INSERT INTO feedback_chat (user_id, commit_hash, message)
-            VALUES ($1, $2, $3)
-        """,
-            payload.get("user_id"),
-            payload.get("commit_hash"),
-            payload.get("message")
-        )
+                           INSERT INTO feedback_chat (user_id, commit_hash, message)
+                           VALUES ($1, $2, $3)
+                           """,
+                           payload.get("user_id"),
+                           payload.get("commit_hash"),
+                           payload.get("message")
+                           )
     return {"status": "ok"}

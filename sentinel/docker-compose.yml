@@ -1,0 +1,48 @@
+services:
+  backend:
+    build:
+      context: ./backend/sentinel-backend
+      dockerfile: Dockerfile
+    container_name: sentinel-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/sentinel-backend:/app
+      - ./data:/app/data
+    environment:
+      - DATABASE_URL=postgresql://user:pass@db:5432/sentinel
+      - REDIS_URL=redis://redis:6379/0
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - redis
+
+  celery:
+    build:
+      context: ./backend/sentinel-backend
+      dockerfile: Dockerfile
+    container_name: sentinel-celery
+    working_dir: /app
+    command: celery -A tasks.celery worker --loglevel=info
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+      - backend
+
+  redis:
+    image: redis:7
+    container_name: sentinel-redis
+    ports:
+      - "6379:6379"
+
+  frontend:
+    build: ./frontend
+    container_name: sentinel-frontend
+    ports:
+      - "5173:5173"
+    command: npm run dev -- --host
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules   # ✅ prevents overwriting node_modules inside container
+    depends_on:
+      - backend
