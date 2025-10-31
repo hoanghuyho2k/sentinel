@@ -11,7 +11,9 @@ COPY . /app
 RUN pip install --no-cache-dir \
     fastapi \
     uvicorn \
-    reportlab
+    python-dotenv \
+    reportlab \
+    requests
 
 # Expose FastAPI default port
 EXPOSE 8000

@@ -45,3 +45,25 @@ export async function fetchInsights() {
         return { insight: "Error fetching AI insights." };
     }
 }
+
+// Fetch mock GitHub commits
+export async function processCommits() {
+    const res = await fetch(`${API_BASE_URL}/api/process_commits`, { method: "POST" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+}
+
+export async function fetchProcessed() {
+    const res = await fetch(`${API_BASE_URL}/api/history`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+}
+
+export async function aiExplain(record) {
+    const response = await fetch("http://localhost:8000/api/ai_explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(record),
+    });
+    return await response.json();
+}

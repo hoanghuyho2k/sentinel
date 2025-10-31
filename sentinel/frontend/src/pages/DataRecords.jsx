@@ -1,67 +1,136 @@
 import { useEffect, useState } from "react";
-import { fetchHistory } from "../api";
 import "../styles/dataRecords.css";
+import { fetchProcessed, processCommits, aiExplain } from "../api";
 
 function DataRecords() {
     const [records, setRecords] = useState([]);
     const [selectedRecord, setSelectedRecord] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [AIInsight, setAIInsight] = useState("");
+    const [fetching, setFetching] = useState(false);
 
+    const user = JSON.parse(localStorage.getItem("sentinel_user"));
+
+    // Redirect if not logged in
     useEffect(() => {
-        async function loadData() {
+        if (!user) window.location.href = "/";
+    }, [user]);
+
+    // Load processed data (prototype.json) on mount
+    useEffect(() => {
+        async function loadProcessedData() {
             try {
-                const data = await fetchHistory();
-                setRecords((data || []).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
+                setLoading(true);
+                const data = await fetchProcessed();
+                if (data && Array.isArray(data)) {
+                    // Sort DESCENDING (newest first)
+                    const sorted = data.sort(
+                        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+                    );
+                    setRecords(sorted);
+                }
             } catch (err) {
-                console.error("Failed to load records:", err);
+                console.error("Failed to load processed data:", err);
             } finally {
                 setLoading(false);
             }
         }
-        loadData();
+        loadProcessedData();
     }, []);
 
-    if (loading) return <p className="loading">Loading records...</p>;
+    // --- Fetch new data and replace old ---
+    async function handleFetchCommits() {
+        try {
+            setFetching(true);
+            console.log("🔄 Starting fetch and process from raw_commits.json...");
+
+            // Step 1: Process new commits in backend
+            await processCommits();
+
+            // Step 2: Fetch updated prototype.json
+            const data = await fetchProcessed();
+
+            // Step 3: Sort DESCENDING (newest first)
+            const sorted = data.sort(
+                (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+            );
+            setRecords(sorted);
+
+            console.log("✅ Data successfully refreshed:", sorted.length, "records");
+        } catch (err) {
+            console.error("❌ Fetch failed:", err);
+            alert("Failed to fetch commits: " + err.message);
+        } finally {
+            setFetching(false);
+        }
+    }
+
+    // --- AI Insight ---
+    async function handleAIExplain(record) {
+        try {
+            const res = await aiExplain(record);
+            setAIInsight(res.ai_explanation);
+        } catch (e) {
+            setAIInsight("⚠️ Failed to retrieve AI insight.");
+        }
+    }
 
     return (
         <div className="data-records-page">
-            <h2>Data Records</h2>
+            <div className="header-row">
+                <h2>Data Records</h2>
+                <button
+                    className="fetch-btn"
+                    onClick={handleFetchCommits}
+                    disabled={fetching}
+                >
+                    {fetching ? "Fetching..." : "🔄 Fetch from GitHub"}
+                </button>
+            </div>
 
-            <table className="records-table">
-                <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Project</th>
-                    <th>Message</th>
-                    <th>Risk</th>
-                    <th>Confidence</th>
-                    <th>Freeze</th>
-                    <th>Timestamp</th>
-                    <th>Details</th>
-                </tr>
-                </thead>
-                <tbody>
-                {records.map((r, i) => (
-                    <tr
-                        key={i}
-                        className={`${r.freeze_request ? "freeze-row" : ""} ${
-                            r.risk_score > 50 ? "high-risk" : ""
-                        }`}
-                    >
-                        <td>{r.user}</td>
-                        <td>{r.project}</td>
-                        <td title={r.commit_message}>{r.commit_message}</td>
-                        <td>{r.risk_score}</td>
-                        <td>{r.confident_score}%</td>
-                        <td>{r.freeze_request ? "✅" : "—"}</td>
-                        <td>{new Date(r.timestamp).toLocaleString()}</td>
-                        <td>
-                            <button onClick={() => setSelectedRecord(r)}>View</button>
-                        </td>
+            {loading ? (
+                <p className="loading-message">Loading records...</p>
+            ) : records.length === 0 ? (
+                <p className="empty-message">
+                    No records found. Click “Fetch from GitHub” to process new commits.
+                </p>
+            ) : (
+                <table className="records-table">
+                    <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Project</th>
+                        <th>Message</th>
+                        <th>Risk</th>
+                        <th>Confidence</th>
+                        <th>Freeze</th>
+                        <th>Timestamp</th>
+                        <th>Details</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {records.map((r, i) => (
+                        <tr
+                            key={i}
+                            className={`${r.freeze_request ? "freeze-row" : ""} ${
+                                r.risk_score > 50 ? "high-risk" : ""
+                            }`}
+                        >
+                            <td>{r.user}</td>
+                            <td>{r.project}</td>
+                            <td title={r.commit_message}>{r.commit_message}</td>
+                            <td>{r.risk_score}</td>
+                            <td>{r.confident_score}%</td>
+                            <td>{r.freeze_request ? "✅" : "—"}</td>
+                            <td>{new Date(r.timestamp).toLocaleString()}</td>
+                            <td>
+                                <button onClick={() => setSelectedRecord(r)}>View</button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            )}
 
             {selectedRecord && (
                 <div className="modal-overlay" onClick={() => setSelectedRecord(null)}>
@@ -73,7 +142,11 @@ function DataRecords() {
                         <p><strong>Commit Hash:</strong> {selectedRecord.commit_hash}</p>
                         <p>
                             <strong>Repo:</strong>{" "}
-                            <a href={selectedRecord.repo_url} target="_blank" rel="noreferrer">
+                            <a
+                                href={selectedRecord.repo_url}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
                                 {selectedRecord.repo_url}
                             </a>
                         </p>
@@ -86,9 +159,17 @@ function DataRecords() {
                         <p><strong>Files Modified:</strong> {selectedRecord.file_modified.join(", ") || "None"}</p>
                         <p><strong>Files Removed:</strong> {selectedRecord.file_removed.join(", ") || "None"}</p>
 
-                        <button className="close-btn" onClick={() => setSelectedRecord(null)}>
-                            Close
-                        </button>
+                        <hr />
+                        <h4>🤖 AI Insight</h4>
+                        <p className="ai-insight">{AIInsight || "Click Explain to get insight."}</p>
+                        <div className="modal-actions">
+                            <button onClick={() => handleAIExplain(selectedRecord)}>
+                                🔍 Explain Decision
+                            </button>
+                            <button className="close-btn" onClick={() => setSelectedRecord(null)}>
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
