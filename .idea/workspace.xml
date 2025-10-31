@@ -4,8 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7322ce0f-5c4f-47c4-88c8-3889d8dd4a45" name="Changes" comment="Adding dataRecord page">
+    <list default="true" id="7322ce0f-5c4f-47c4-88c8-3889d8dd4a45" name="Changes" comment="Fixing frontend, adding download csv/pdf features">
+      <change afterPath="$PROJECT_DIR$/sentinel/backend/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/backend/data/raw_commits.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/frontend/src/assets/github_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sentinel/frontend/src/styles/Login.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/backend/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/backend/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/backend/data/prototype.json" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/backend/data/prototype.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/backend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/backend/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/pages/DataRecords.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/pages/DataRecords.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/pages/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sentinel/frontend/src/styles/dataRecords.css" beforeDir="false" afterPath="$PROJECT_DIR$/sentinel/frontend/src/styles/dataRecords.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +27,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -40,7 +52,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="AISelfReview" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -57,18 +69,21 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Reports&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;integration&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/sentinel/frontend/src/assets" />
+      <recent name="$PROJECT_DIR$/sentinel/backend/data" />
+      <recent name="$PROJECT_DIR$/sentinel/backend" />
       <recent name="$PROJECT_DIR$/sentinel/src/styles" />
     </key>
   </component>
@@ -101,6 +116,10 @@
       <workItem from="1760930107196" duration="1814000" />
       <workItem from="1761483737283" duration="1780000" />
       <workItem from="1761545952773" duration="323000" />
+      <workItem from="1761696656410" duration="15244000" />
+      <workItem from="1761807663094" duration="2042000" />
+      <workItem from="1761823772222" duration="13012000" />
+      <workItem from="1761876524215" duration="3128000" />
     </task>
     <task id="LOCAL-00001" summary="App setup">
       <option name="closed" value="true" />
@@ -142,11 +161,41 @@
       <option name="project" value="LOCAL" />
       <updated>1760999213521</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Adding docker and fix backend">
+      <option name="closed" value="true" />
+      <created>1761803619995</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1761803619995</updated>
+    </task>
+    <task id="LOCAL-00007" summary="fixing folder structure, connecting frontend and backend">
+      <option name="closed" value="true" />
+      <created>1761827635245</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1761827635245</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Fixing frontend, adding download csv/pdf features">
+      <option name="closed" value="true" />
+      <created>1761865428055</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1761865428055</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="javascript:npm:react" />
+    <option featureType="dependencySupport" implementationName="executable:docker" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:vite" />
+    <option featureType="dependencySupport" implementationName="executable:kubectl" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -171,6 +220,9 @@
     <MESSAGE value="App setup" />
     <MESSAGE value="Adding Navbar" />
     <MESSAGE value="Adding dataRecord page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding dataRecord page" />
+    <MESSAGE value="Adding docker and fix backend" />
+    <MESSAGE value="fixing folder structure, connecting frontend and backend" />
+    <MESSAGE value="Fixing frontend, adding download csv/pdf features" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing frontend, adding download csv/pdf features" />
   </component>
 </project>
