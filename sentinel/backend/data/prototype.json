@@ -1,5 +1,425 @@
 [
   {
+    "id": 33,
+    "user": "jack",
+    "author_email": "jack@gmail.com",
+    "project": "sentinel",
+    "commit_message": "feat: implement new AI compliance checker with detailed rules and review label",
+    "commit_hash": "b1c2d3",
+    "repo_url": "https://github.com/team/sentinel",
+    "timestamp": "2025-11-02T23:00:00Z",
+    "lines_changed": 200,
+    "prev_bugs": 5,
+    "test_coverage": 70,
+    "file_added": [
+      "services/compliance_checker.py"
+    ],
+    "file_removed": [],
+    "file_modified": [
+      "services/compliance_checker.py"
+    ],
+    "risk_score": 55.0,
+    "confident_score": 81,
+    "freeze_request": true,
+    "feedback": "Commit timestamp is in the future",
+    "factor_impact": {
+      "lines_changed": -25,
+      "touches_core": 0,
+      "prev_bugs": -25,
+      "test_coverage": -5.0,
+      "num_files_modified": 0
+    }
+  },
+  {
+    "id": 32,
+    "user": "son",
+    "author_email": "son@gmail.com",
+    "project": "sentinel",
+    "commit_message": "fix(core): emergency patch",
+    "commit_hash": "y7z8a9",
+    "repo_url": "https://github.com/team/sentinel",
+    "timestamp": "2025-11-02T22:00:00Z",
+    "lines_changed": 60,
+    "prev_bugs": 1,
+    "test_coverage": 80,
+    "file_added": [],
+    "file_removed": [],
+    "file_modified": [
+      "core/settings.py"
+    ],
+    "risk_score": 45.0,
+    "confident_score": 34,
+    "freeze_request": true,
+    "feedback": "Commit prefix missing or invalid | Protected directory modified without approval | Commit timestamp is in the future",
+    "factor_impact": {
+      "lines_changed": -10,
+      "touches_core": -30,
+      "prev_bugs": -5,
+      "test_coverage": 0,
+      "num_files_modified": 0
+    }
+  },
+  {
+    "id": 31,
+    "user": "henry",
+    "author_email": "henry@gmail.com",
+    "project": "sentinel",
+    "commit_message": "chore: update dependencies",
+    "commit_hash": "v4w5x6",
+    "repo_url": "https://github.com/team/sentinel",
+    "timestamp": "2025-11-02T21:00:00Z",
+    "lines_changed": 10,
+    "prev_bugs": 0,
+    "test_coverage": 95,
+    "file_added": [],
+    "file_removed": [],
+    "file_modified": [
+      "requirements.txt"
+    ],
+    "risk_score": 0,
+    "confident_score": 50,
+    "freeze_request": true,
+    "feedback": "Commit prefix missing or invalid | Commit timestamp is in the future",
+    "factor_impact": {
+      "lines_changed": 0,
+      "touches_core": 0,
+      "prev_bugs": 0,
+      "test_coverage": 0,
+      "num_files_modified": 0
+    }
+  },
+  {
+    "id": 30,
+    "user": "grace",
+    "author_email": "grace@gmail.com",
+    "project": "sentinel",
+    "commit_message": "fix(auth): correct login bug",
+    "commit_hash": "s1t2u3",
+    "repo_url": "https://github.com/team/sentinel",
+    "timestamp": "2025-11-02T20:00:00Z",
+    "lines_changed": 150,
+    "prev_bugs": 4,
+    "test_coverage": 60,
+    "file_added": [],
+    "file_removed": [],
+    "file_modified": [
+      "auth/login.py"
+    ],
+    "risk_score": 55.0,
+    "confident_score": 34,
+    "freeze_request": true,
+    "feedback": "Commit prefix missing or invalid | Protected directory modified without approval | Commit timestamp is in the future",
+    "factor_impact": {
+      "lines_changed": -25,
+      "touches_core": 0,
+      "prev_bugs": -20,
+      "test_coverage": -10.0,
+      "num_files_modified": 0
+    }
+  },
+  {
+    "id": 29,
+    "user": "frank",
+    "author_email": "frank@gmail.com",
+    "project": "sentinel",
+    "commit_message": "docs(readme): update documentation with proper format",
+    "commit_hash": "p7q8r9",
+    "repo_url": "https://github.com/team/sentinel",
+    "timestamp": "2025-11-02T19:00:00Z",
+    "lines_changed": 100,
+    "prev_bugs": 1,
+    "test_coverage": 90,
+    "file_added": [
+      "README.md"
+    ],
+    "file_removed": [],
+    "file_modified": [
+      "README.md"
+    ],
+    "risk_score": 15.0,
+    "confident_score": 56,
+    "freeze_request": true,
+    "feedback": "Commit prefix missing or invalid | Commit timestamp is in the future",
+    "factor_impact": {
+      "lines_changed": -10,
+      "touches_core": 0,
+      "prev_bugs": -5,
+      "test_coverage": 0,
+      "num_files_modified": 0
+    }
+  },
+  {
+    "id": 28,
+    "user": "eve",
+    "author_email": "eve@gmail.com",
+    "project": "sentinel",
+    "commit_message": "fix: temporary quick fix for bug",
+    "commit_hash": "m4n5o6",
+    "repo_url": "https://github.com/team/sentinel",
+    "timestamp": "2025-11-02T18:00:00Z",
+    "lines_changed": 20,
+    "prev_bugs": 2,
+    "test_coverage": 75,
+    "file_added": [
+      "tmp/test.tmp"
+    ],
+    "file_removed": [],
+    "file_modified": [],
+    "risk_score": 12.5,
+    "confident_score": 56,
+    "freeze_request": true,
+    "feedback": "Contains risky keyword | Commit timestamp is in the future",
+    "factor_impact": {
+      "lines_changed": 0,
+      "touches_core": 0,
+      "prev_bugs": -10,
+      "test_coverage": -2.5,
+      "num_files_modified": 0
+    }
+  },
+  {
+    "id": 27,
+    "user": "diana",
+    "author_email": "diana@example.com",
+    "project": "sentinel",
+    "commit_message": "fix: feat: multiple prefixes test",
+    "commit_hash": "j1k2l3",
+    "repo_url": "https://github.com/team/sentinel",
+    "timestamp": "2025-11-02T17:00:00Z",
+    "lines_changed": 8,
+    "prev_bugs": 0,
+    "test_coverage": 90,
+    "file_added": [],
+    "file_removed": [],
+    "file_modified": [
+      "app/dashboard.py"
+    ],
+    "risk_score": 0,
+    "confident_score": 69,
+    "freeze_request": true,
+    "feedback": "Multiple prefixes detected | Commit timestamp is in the future",
+    "factor_impact": {
+      "lines_changed": 0,
+      "touches_core": 0,
+      "prev_bugs": 0,
+      "test_coverage": 0,
+      "num_files_modified": 0
+    }
+  },
+  {
+    "id": 25,
+    "user": "bob",
+    "author_email": "bob@gmail.com",
+    "project": "sentinel",
+    "commit_message": "fix: correct null pointer exception",
+    "commit_hash": "d4e5f6",
+    "repo_url": "https://github.com/team/sentinel",
+    "timestamp": "2025-11-02T16:38:00Z",
+    "lines_changed": 12,
+    "prev_bugs": 3,
+    "test_coverage": 92,
+    "file_added": [],
+    "file_removed": [],
+    "file_modified": [
+      "app/utils.py"
+    ],
+    "risk_score": 15.0,
+    "confident_score": 81,
+    "freeze_request": true,
+    "feedback": "Commit timestamp is in the future",
+    "factor_impact": {
+      "lines_changed": 0,
+      "touches_core": 0,
+      "prev_bugs": -15,
+      "test_coverage": 0,
+      "num_files_modified": 0
+    }
+  },
+  {
+    "id": 24,
+    "user": "huy",
+    "author_email": "huy@gmail.com",
+    "project": "sentinel",
+    "commit_message": "feat: add user login page",
+    "commit_hash": "c1a2b3",
+    "repo_url": "https://github.com/team4/sentinel",
+    "timestamp": "2025-11-02T16:28:00Z",
+    "lines_changed": 42,
+    "prev_bugs": 10,
+    "test_coverage": 85,
+    "file_added": [
+      "app/login.py"
+    ],
+    "file_removed": [],
+    "file_modified": [
+      "app/login.py"
+    ],
+    "risk_score": 50.0,
+    "confident_score": 81,
+    "freeze_request": true,
+    "feedback": "Commit timestamp is in the future",
+    "factor_impact": {
+      "lines_changed": 0,
+      "touches_core": 0,
+      "prev_bugs": -50,
+      "test_coverage": 0,
+      "num_files_modified": 0
+    }
+  },
+  {
+    "id": 26,
+    "user": "charlie",
+    "author_email": "charlie@gmail.com",
+    "project": "sentinel",
+    "commit_message": "temp",
+    "commit_hash": "g7h8i9",
+    "repo_url": "https://github.com/team/sentinel",
+    "timestamp": "2025-11-02T16:00:00Z",
+    "lines_changed": 5,
+    "prev_bugs": 0,
+    "test_coverage": 100,
+    "file_added": [],
+    "file_removed": [],
+    "file_modified": [
+      "core/secret.py"
+    ],
+    "risk_score": 30.0,
+    "confident_score": 10,
+    "freeze_request": true,
+    "feedback": "Commit prefix missing or invalid | Protected directory modified without approval | Commit message too short | Message format incorrect | Commit timestamp is in the future",
+    "factor_impact": {
+      "lines_changed": 0,
+      "touches_core": -30,
+      "prev_bugs": 0,
+      "test_coverage": 0,
+      "num_files_modified": 0
+    }
+  },
+  {
+    "id": 21,
+    "user": "alice",
+    "project": "sentinel",
+    "commit_message": "feat(core): add user authentication",
+    "commit_body": "Implemented login, logout, and session management for core module.",
+    "commit_hash": "abc123def456",
+    "repo_url": "https://github.com/hoanghuyho2k/sentinel",
+    "file_added": [
+      "core/auth.py",
+      "core/utils.py"
+    ],
+    "file_removed": [],
+    "file_modified": [
+      "core/main.py",
+      "core/auth.py"
+    ],
+    "pr_labels": [
+      "@approved",
+      "security"
+    ],
+    "author_email": "huy@gmail.com",
+    "branch": "feature/auth",
+    "timestamp": "2025-11-02T12:34:56Z",
+    "lines_changed": 120,
+    "prev_bugs": 2,
+    "test_coverage": 85,
+    "risk_score": 65.0,
+    "confident_score": 60,
+    "freeze_request": true,
+    "feedback": "Commit missing approved prefix (fix:, feat:, test:, docs:)"
+  },
+  {
+    "id": 20,
+    "user": "tonnuanhthu",
+    "project": "Backend",
+    "commit_message": "feat: add Docker build fix for backend",
+    "commit_hash": "abc123",
+    "repo_url": "https://github.com/Sondnn/sentinel",
+    "file_added": [],
+    "file_removed": [],
+    "file_modified": [],
+    "timestamp": "2025-11-02T12:00:00Z",
+    "lines_changed": 10,
+    "prev_bugs": 0,
+    "test_coverage": 100,
+    "risk_score": 0,
+    "confident_score": 100,
+    "freeze_request": false,
+    "feedback": "feature allowed"
+  },
+  {
+    "id": 19,
+    "user": "hoanghuy",
+    "project": "frontend",
+    "commit_message": "fix: correct typo in README",
+    "commit_hash": "5asfe40op",
+    "repo_url": "https://github.com/hoanghuyho2k/sentinel",
+    "file_added": [],
+    "file_removed": [],
+    "file_modified": [
+      "frontend/README.md"
+    ],
+    "timestamp": "2025-11-02T12:00:00Z",
+    "lines_changed": 90,
+    "prev_bugs": 10,
+    "test_coverage": 85,
+    "risk_score": 60.0,
+    "confident_score": 60,
+    "freeze_request": true,
+    "feedback": "bug_fix allowed"
+  },
+  {
+    "id": 23,
+    "user": "charlie",
+    "project": "sentinel",
+    "commit_message": "docs: update README with setup instructions",
+    "commit_body": "Added detailed setup instructions and environment variables section.",
+    "commit_hash": "ghi345jkl678",
+    "repo_url": "https://github.com/charlie/sentinel",
+    "file_added": [
+      "README.md"
+    ],
+    "file_removed": [],
+    "file_modified": [],
+    "pr_labels": [
+      "Reviewed-by: team-lead@example.com"
+    ],
+    "author_email": "charlie@gmail.com",
+    "branch": "docs/update-readme",
+    "timestamp": "2025-11-02T08:15:30Z",
+    "lines_changed": 15,
+    "prev_bugs": 0,
+    "test_coverage": 100,
+    "risk_score": 0,
+    "confident_score": 60,
+    "freeze_request": false,
+    "feedback": "Commit author not in authorized team \u2014 warning"
+  },
+  {
+    "id": 22,
+    "user": "bob",
+    "project": "sentinel",
+    "commit_message": "fix: quick fix temporary patch",
+    "commit_body": "Hotfix for database connection issue, temporary solution.",
+    "commit_hash": "def789ghi012",
+    "repo_url": "https://github.com/son/sentinel/db",
+    "file_added": [],
+    "file_removed": [],
+    "file_modified": [
+      "db/connection.py"
+    ],
+    "pr_labels": [],
+    "author_email": "son@gmail.com",
+    "branch": "main",
+    "timestamp": "2025-11-01T09:00:00Z",
+    "lines_changed": 10,
+    "prev_bugs": 5,
+    "test_coverage": 50,
+    "risk_score": 70.0,
+    "confident_score": 50,
+    "freeze_request": true,
+    "feedback": "Commit contains risky keyword(s); passes with lower confidence"
+  },
+  {
     "id": 18,
     "user": "dinhson",
     "project": "Frontend",
@@ -392,5 +812,29 @@
     "confident_score": 63,
     "freeze_request": true,
     "feedback": "refactor not allowed"
+  },
+  {
+    "id": 201,
+    "user": "anonymous",
+    "user_email": null,
+    "project": "Unknown",
+    "commit_message": "",
+    "commit_hash": "N/A",
+    "repo_url": "",
+    "risk_score": 0,
+    "confident_score": 19,
+    "freeze_request": true,
+    "feedback": "Commit prefix missing or invalid | Commit message too short | Message format incorrect",
+    "factor_impact": {
+      "lines_changed": 0,
+      "touches_core": 0,
+      "prev_bugs": 0,
+      "test_coverage": 0,
+      "num_files_modified": 0
+    },
+    "file_added": [],
+    "file_removed": [],
+    "file_modified": [],
+    "timestamp": null
   }
 ]

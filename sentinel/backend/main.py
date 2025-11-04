@@ -53,22 +53,28 @@ def analyze_commit(payload: dict):
             changed_files=payload.get("file_modified", []),
             pr_title=payload.get("pr_title", ""),
             pr_labels=payload.get("pr_labels", []),
+            author_email=payload.get("user_email"),
+            timestamp=payload.get("timestamp")
         )
 
         features = extract_features(payload)
         risk = predict_risk_score(features)
 
+        freeze_request = risk["risk_score"] > 50 or not compliance["is_compliant"]
+
         record = {
             "id": payload.get("id") or int(os.urandom(1)[0]),
             "user": payload.get("user", "anonymous"),
+            "user_email": payload.get("user_email"),
             "project": payload.get("project", "Unknown"),
             "commit_message": payload.get("commit_message", ""),
             "commit_hash": payload.get("commit_hash", "N/A"),
             "repo_url": payload.get("repo_url", ""),
             "risk_score": risk["risk_score"],
             "confident_score": int(compliance.get("confidence", 0) * 100),
-            "freeze_request": False,
+            "freeze_request": freeze_request,
             "feedback": compliance.get("message", ""),
+            "factor_impact": risk.get("factor_impact"),
             "file_added": payload.get("file_added", []),
             "file_removed": payload.get("file_removed", []),
             "file_modified": payload.get("file_modified", []),
@@ -212,7 +218,6 @@ def process_commits():
 
         processed = []
         for commit in raw_data:
-            # Risk prediction
             features = extract_features({
                 "lines_changed": commit.get("lines_changed", 40),
                 "prev_bugs": commit.get("prev_bugs", 1),
@@ -221,39 +226,37 @@ def process_commits():
             })
             risk_result = predict_risk_score(features)
 
-            # Compliance check
             compliance = check_compliance(
                 commit_message=commit.get("commit_message", ""),
                 changed_files=commit.get("file_modified", []),
                 pr_title="",
-                pr_labels=[]
+                pr_labels=[],
+                author_email=commit.get("user_email"),
+                timestamp=commit.get("timestamp")
             )
 
-            freeze_request = (
-                    risk_result["risk_score"] > 50 or not compliance["is_compliant"]
-            )
+            freeze_request = risk_result["risk_score"] > 50 or not compliance["is_compliant"]
 
             processed.append({
                 **commit,
                 "risk_score": round(risk_result["risk_score"], 1),
-                "confident_score": int(100 - risk_result["risk_score"] / 1.5),
+                "confident_score": int(compliance.get("confidence", 0) * 100),
                 "freeze_request": freeze_request,
                 "feedback": compliance["message"],
+                "factor_impact": risk_result.get("factor_impact")
             })
 
-        # Load existing processed data
         existing_data = []
         if PROCESSED_PATH.exists():
             with open(PROCESSED_PATH, "r") as f:
                 existing_data = json.load(f)
 
-        # Merge unique commits by commit_hash
         existing_hashes = {c.get("commit_hash") for c in existing_data}
         merged_data = existing_data + [
             c for c in processed if c.get("commit_hash") not in existing_hashes
         ]
 
-        # ✅ Normalize timestamps & sort DESCENDING (newest first)
+        # Sort newest first
         def parse_time(ts):
             try:
                 return datetime.fromisoformat(ts.replace("Z", ""))
@@ -262,54 +265,45 @@ def process_commits():
 
         merged_data.sort(key=lambda c: parse_time(c["timestamp"]), reverse=True)
 
-        # Save sorted prototype.json
         with open(PROCESSED_PATH, "w") as f:
             json.dump(merged_data, f, indent=2)
 
-        # ✅ Clear raw_commits.json after successful processing
+        # Clear raw commits
         with open(RAW_PATH, "w") as f:
             json.dump([], f, indent=2)
 
         return {
-            "message": (
-                f"✅ Processed {len(processed)} new commits. "
-                f"Prototype updated with {len(merged_data)} total entries (sorted)."
-            ),
+            "message": f"✅ Processed {len(processed)} new commits. "
+                       f"Prototype updated with {len(merged_data)} total entries (sorted).",
             "count": len(merged_data),
         }
 
     except Exception as e:
-        import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/api/ai_explain")
 async def ai_explain(request: Request):
     try:
         data = await request.json()
-        print("🧠 Incoming AI Explain request:", data)
 
-        # Ensure data is a dict
         if not isinstance(data, dict):
             return {"ai_explanation": "Invalid input format — expected JSON object."}
 
-        # Extract safely
         risk = data.get("risk_score", 0)
         conf = data.get("confident_score", 0)
         freeze = data.get("freeze_request", False)
         message = data.get("commit_message", "")
 
-        # AI-like reasoning
         if freeze:
             reason = (
                 f"The commit '{message}' shows a high risk score ({risk}) and "
-                f"lower confidence ({conf}%). The system recommends a freeze to "
-                f"prevent unstable releases."
+                f"lower confidence ({conf}%). The system recommends a freeze."
             )
         else:
             reason = (
-                f"The commit '{message}' is stable with risk {risk} and confidence {conf}%. "
-                f"No freeze required; safe to deploy."
+                f"The commit '{message}' is stable with risk {risk} and confidence {conf}%."
             )
 
         variations = [
@@ -317,12 +311,11 @@ async def ai_explain(request: Request):
             f"AI analysis: '{message}' classified as {'risky' if freeze else 'stable'} "
             f"(risk={risk}, confidence={conf}). Decision: {'freeze' if freeze else 'continue'}.",
             f"This commit {'may cause instability' if freeze else 'is low-risk and stable'} "
-            f"based on its metrics and history.",
+            f"based on metrics and history.",
         ]
 
         return {"ai_explanation": random.choice(variations)}
 
     except Exception as e:
-        print("❌ AI Explain error:", e)
         traceback.print_exc()
         return {"ai_explanation": f"⚠️ Internal error: {str(e)}"}
