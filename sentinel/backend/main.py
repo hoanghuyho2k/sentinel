@@ -94,7 +94,7 @@ def analyze_commit(payload: dict):
 
 @app.get("/api/insights")
 def get_ai_insights():
-    """Generate AI-style commit summary."""
+    """Generate a metric-based summary of processed commits."""
     try:
         if not PROCESSED_PATH.exists():
             return {"insight": "No data available."}
@@ -309,7 +309,7 @@ async def ai_explain(request: Request):
 
         variations = [
             reason,
-            f"AI analysis: '{message}' classified as {'risky' if freeze else 'stable'} "
+            f"Automated assessment: '{message}' classified as {'risky' if freeze else 'stable'} "
             f"(risk={risk}, confidence={conf}). Decision: {'freeze' if freeze else 'continue'}.",
             f"This commit {'may cause instability' if freeze else 'is low-risk and stable'} "
             f"based on metrics and history.",
