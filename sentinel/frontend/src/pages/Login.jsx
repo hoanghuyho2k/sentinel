@@ -15,15 +15,15 @@ function Login() {
 
     return (
         <div className="login-page">
-            <h2>🔐 Sentinel Login</h2>
+            <h2>Sentinel Demo Sign-in</h2>
             <form onSubmit={handleLogin}>
                 <input
                     type="text"
-                    placeholder="Enter username (e.g. dinhson, pooja, admin)"
+                    placeholder="Choose a demo username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                 />
-                <button type="submit">Login</button>
+                <button type="submit">Enter demo</button>
             </form>
         </div>
     );
