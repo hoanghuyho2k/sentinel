@@ -1,0 +1,22 @@
+name: Sentinel Docker build
+
+on:
+  pull_request:
+    paths:
+      - "sentinel/**"
+      - "render.yaml"
+      - ".github/workflows/sentinel-docker-build.yml"
+  push:
+    branches: [main]
+    paths:
+      - "sentinel/**"
+      - "render.yaml"
+      - ".github/workflows/sentinel-docker-build.yml"
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Sentinel image
+        run: docker build --file sentinel/Dockerfile --tag sentinel-demo:ci sentinel
