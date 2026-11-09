@@ -65,13 +65,13 @@ function DataRecords() {
         }
     }
 
-    // --- AI Insight ---
+    // --- Metric-based explanation ---
     async function handleAIExplain(record) {
         try {
             const res = await aiExplain(record);
             setAIInsight(res.ai_explanation);
         } catch (e) {
-            setAIInsight("⚠️ Failed to retrieve AI insight.");
+            setAIInsight("⚠️ Failed to generate the explanation.");
         }
     }
 
@@ -84,7 +84,7 @@ function DataRecords() {
                     onClick={handleFetchCommits}
                     disabled={fetching}
                 >
-                    {fetching ? "Fetching..." : "🔄 Fetch from GitHub"}
+                    {fetching ? "Loading demo records..." : "↻ Load demo records"}
                 </button>
             </div>
 
@@ -92,7 +92,7 @@ function DataRecords() {
                 <p className="loading-message">Loading records...</p>
             ) : records.length === 0 ? (
                 <p className="empty-message">
-                    No records found. Click “Fetch from GitHub” to process new commits.
+                    No records found. Select “Load demo records” to process sample data.
                 </p>
             ) : (
                 <table className="records-table">
@@ -160,8 +160,8 @@ function DataRecords() {
                         <p><strong>Files Removed:</strong> {selectedRecord.file_removed.join(", ") || "None"}</p>
 
                         <hr />
-                        <h4>🤖 AI Insight</h4>
-                        <p className="ai-insight">{AIInsight || "Click Explain to get insight."}</p>
+                        <h4>Metric-based explanation</h4>
+                        <p className="ai-insight">{AIInsight || "Select Explain Decision to view the metric-based explanation."}</p>
                         <div className="modal-actions">
                             <button onClick={() => handleAIExplain(selectedRecord)}>
                                 🔍 Explain Decision
