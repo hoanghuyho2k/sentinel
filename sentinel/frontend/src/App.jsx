@@ -13,6 +13,11 @@ function App() {
     return (
         <Router>
             <Navbar />
+            <div className="demo-banner" role="note">
+                <span className="demo-banner-label">DEMO MODE</span>
+                <span>Sample release data · Sign-in is simulated</span>
+            </div>
+            <main className="app-main">
             <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/data-record" element={<DataRecords />} />
@@ -22,6 +27,7 @@ function App() {
                 <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
+            </main>
         </Router>
     )
 }
