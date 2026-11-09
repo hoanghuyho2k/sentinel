@@ -8,7 +8,7 @@ import {
 
 function Reports() {
     const [records, setRecords] = useState([]);
-    const [insight, setInsight] = useState("Loading AI insights...");
+    const [insight, setInsight] = useState("Loading release summary...");
 
     useEffect(() => {
         async function loadData() {
@@ -98,9 +98,9 @@ function Reports() {
                 </div>
             </section>
 
-            {/* AI Insights */}
+            {/* Release summary */}
             <div className="ai-insights">
-                <h3>🤖 AI Insights</h3>
+                <h3>Release summary</h3>
                 <p>{insight}</p>
             </div>
 

@@ -1,29 +1,35 @@
-import {Link} from "react-router-dom";
-import "../styles/Navbar.css"
+import { NavLink, Link } from "react-router-dom";
+import "../styles/Navbar.css";
+
+const links = [
+    { to: "/", label: "Dashboard", end: true },
+    { to: "/data-record", label: "Data Records" },
+    { to: "/reports", label: "Reports" },
+];
 
 export default function Navbar() {
-
     return (
-        <nav className="navbar">
+        <nav className="navbar" aria-label="Main navigation">
             <div className="navbar-container">
+                <Link to="/" className="navbar-logo" aria-label="Sentinel home">
+                    <span className="navbar-mark" aria-hidden="true">S</span>
+                    <span>Sentinel</span>
+                </Link>
 
-                {/*Logo*/}
-                <Link to="/" className="navbar-logo" style={{color: "lightblue", textDecoration: "none"}}>💻 Sentinel</Link>
-
-                {/*Link*/}
                 <ul className="navbar-links">
-                    <li><Link to="/" style={{color: "lightblue", textDecoration: "none"}}>Dashboard</Link></li>
-                    <li><Link to="/data-record" style={{color: "lightblue", textDecoration: "none"}}>Data Records</Link>
-                    </li>
-                    <li><Link to="/reports" style={{color: "lightblue", textDecoration: "none"}}>Reports</Link></li>
+                    {links.map(({ to, label, end }) => (
+                        <li key={to}>
+                            <NavLink to={to} end={end} className={({ isActive }) => isActive ? "active" : ""}>
+                                {label}
+                            </NavLink>
+                        </li>
+                    ))}
                 </ul>
 
-                {/*Buttons*/}
                 <div className="navbar-buttons">
-                    <Link to="/login" style={{color: "lightblue", textDecoration: "none"}}>🔐</Link>
-                    <Link to="/settings" style={{color: "lightblue", textDecoration: "none"}}>⚙️</Link>
+                    <NavLink to="/login" className="nav-action" aria-label="Demo sign in" title="Demo sign in">Sign in</NavLink>
+                    <NavLink to="/settings" className="nav-icon" aria-label="Settings" title="Settings">⚙</NavLink>
                 </div>
-
             </div>
         </nav>
     );

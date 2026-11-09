@@ -4,7 +4,7 @@ import json, os
 from services.compliance_checker import check_compliance
 from services.risk_predictor import predict_risk_score, extract_features
 from pathlib import Path
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 import csv, io
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
@@ -22,6 +22,7 @@ app.add_middleware(
 
 RAW_PATH = Path("/app/data/raw_commits.json")
 PROCESSED_PATH = Path("/app/data/prototype.json")
+WEB_DIR = Path("/app/frontend/dist")
 
 
 def read_data():
@@ -93,7 +94,7 @@ def analyze_commit(payload: dict):
 
 @app.get("/api/insights")
 def get_ai_insights():
-    """Generate AI-style commit summary."""
+    """Generate a metric-based summary of processed commits."""
     try:
         if not PROCESSED_PATH.exists():
             return {"insight": "No data available."}
@@ -308,7 +309,7 @@ async def ai_explain(request: Request):
 
         variations = [
             reason,
-            f"AI analysis: '{message}' classified as {'risky' if freeze else 'stable'} "
+            f"Automated assessment: '{message}' classified as {'risky' if freeze else 'stable'} "
             f"(risk={risk}, confidence={conf}). Decision: {'freeze' if freeze else 'continue'}.",
             f"This commit {'may cause instability' if freeze else 'is low-risk and stable'} "
             f"based on metrics and history.",
@@ -319,3 +320,38 @@ async def ai_explain(request: Request):
     except Exception as e:
         traceback.print_exc()
         return {"ai_explanation": f"⚠️ Internal error: {str(e)}"}
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
+@app.get("/")
+def serve_index():
+    index_file = WEB_DIR / "index.html"
+    if index_file.is_file():
+        return FileResponse(index_file)
+    return {"message": "Sentinel API is running"}
+
+
+@app.get("/{asset_path:path}", include_in_schema=False)
+def serve_frontend(asset_path: str):
+    """Serve static frontend files and support client-side routes."""
+    if not WEB_DIR.is_dir():
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    requested_file = (WEB_DIR / asset_path).resolve()
+    try:
+        requested_file.relative_to(WEB_DIR.resolve())
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    if requested_file.is_file():
+        return FileResponse(requested_file)
+
+    index_file = WEB_DIR / "index.html"
+    if index_file.is_file():
+        return FileResponse(index_file)
+
+    raise HTTPException(status_code=404, detail="Not Found")

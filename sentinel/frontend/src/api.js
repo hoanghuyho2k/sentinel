@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Base URL for backend API
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
 /**
  * Fetch commit history from the backend
@@ -60,7 +60,7 @@ export async function fetchProcessed() {
 }
 
 export async function aiExplain(record) {
-    const response = await fetch("http://localhost:8000/api/ai_explain", {
+    const response = await fetch(`${API_BASE_URL}/api/ai_explain`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(record),
