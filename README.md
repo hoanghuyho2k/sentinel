@@ -45,12 +45,28 @@ It combines **FastAPI** (backend) + **React** (frontend) + **Docker Compose** fo
 
 ---
 
+## Portfolio Demo Deployment
+
+This repository contains a Render Blueprint and Dockerfile that build the React client and serve it with the FastAPI API from one web service.
+
+1. Connect the public `hoanghuyho2k/sentinel` repository in Render using **New → Blueprint**.
+2. Deploy the `sentinel-demo` service from `render.yaml`.
+3. Open the service URL; `/health` should return `{"status":"ok"}`.
+
+The login is simulated and is not real GitHub authentication. The dashboard uses project sample data and is a demonstration, not a production release-governance service. Data changed during a hosted demo may reset when the service restarts.
+
+## Configuration and secrets
+
+Do not commit `.env` files or OAuth credentials. The previous backend `.env` file was removed because it contained a populated GitHub client secret. Treat that credential as compromised and rotate it in GitHub Developer Settings. Removing the file from the latest commit does not remove it from earlier Git history.
+
+---
+
 ## Setup & Run
 
 ### Clone the repo
 ```bash
-git clone https://github.com/dinhson/sentinel.git
-cd sentinel
+git clone https://github.com/hoanghuyho2k/sentinel.git
+cd sentinel/sentinel
 ```
 
 ### Run with Docker
