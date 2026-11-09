@@ -1,4 +1,4 @@
-# Sentinel – AI-Powered Release Governance Dashboard
+# Sentinel – Release Risk & Compliance Dashboard
 
 **Sentinel** is a full-stack analytics dashboard designed to help engineering teams monitor software releases, predict commit risks, and automate freeze/unfreeze recommendations.  
 It combines **FastAPI** (backend) + **React** (frontend) + **Docker Compose** for modular deployment.
@@ -19,8 +19,10 @@ It combines **FastAPI** (backend) + **React** (frontend) + **Docker Compose** fo
   - `compliance_checker.py`
 - Merges processed results into `prototype.json`  
 
-### AI Insights
-- Each commit can trigger an **AI explanation** via `/api/ai_explain`
+### Risk & Compliance Insights
+- Rule-based risk scoring from change size, protected files, previous bugs and test coverage.
+- Commit-policy checks for message format, protected directories, labels and other configured rules.
+- Deterministic summaries and metric-based explanations; no AI/LLM service is connected.
 - Example output:
   > “The commit *‘Add LLM-based risk predictor’* shows a high risk score (56) and low confidence (62%).  
   > The system recommends a freeze to prevent unstable releases.”
@@ -32,13 +34,13 @@ It combines **FastAPI** (backend) + **React** (frontend) + **Docker Compose** fo
 
 ### Reports Page
 - Detailed commit table with filter-by-user and modal details
-- AI-generated freeze reasoning per commit
+- Metric-based freeze explanations per commit
 - CSV and PDF export support via `/api/export/csv` and `/api/export/pdf`
 
 ### Data Pipeline
 | File                             | Purpose                                              |
 | -------------------------------- | ---------------------------------------------------- |
-| `data/raw_commits.json`          | Input data (raw commits fetched from GitHub or mock) |
+| `data/raw_commits.json`          | Input data (sample commits supplied for processing) |
 | `data/prototype.json`            | Processed commit results for visualization           |
 | `services/risk_predictor.py`     | Risk scoring model                                   |
 | `services/compliance_checker.py` | Rule-based message/file compliance checker           |
@@ -84,7 +86,7 @@ curl http://localhost:8000/api/history
 
 ###  Verify frontend
 Visit `http://localhost:5173`  
-Click **“Sign in with GitHub”** → then **“Fetch from GitHub”** → view processed data.
+Open the **demo login** → choose **Load demo records** → review the sample dashboard and reports.
 
 ---
 
@@ -93,7 +95,7 @@ Click **“Sign in with GitHub”** → then **“Fetch from GitHub”** → vie
 | Step | Description                                                         |
 | ---- | ------------------------------------------------------------------- |
 | 1    | Add new commits to `data/raw_commits.json`                          |
-| 2    | Click **“Fetch from GitHub”** → backend processes data              |
+| 2    | Use **Load demo records** → backend processes any supplied sample data              |
 | 3    | Processed results are appended to `prototype.json` (sorted by date) |
 | 4    | `raw_commits.json` is cleared automatically                         |
 | 5    | Open **Dashboard** or **Reports** to visualize results              |
@@ -110,7 +112,7 @@ Click **“Sign in with GitHub”** → then **“Fetch from GitHub”** → vie
 | `/api/github/fetch_commits` | POST | Retrieve commits from prototype file |
 | `/api/export/csv` | GET | Export processed data as CSV |
 | `/api/export/pdf` | GET | Export processed summary as PDF |
-| `/api/ai_explain` | POST | Generate AI-style reasoning for freeze decisions |
+| `/api/ai_explain` | POST | Generate a metric-based explanation for a freeze decision |
 
 ---
 
